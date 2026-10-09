@@ -1,0 +1,51 @@
+{
+ "nota": "Fondo: PDF índice 17 (159×425) ampliado ×5.92 a 942×2518 (Lanczos + unsharp). Relleno: python tools/paper_fill2.py p17_up.png j4_fill.png 124,202,54,118 \"138,190,158,400;146,180,398,600\" \"292,420,198,396;418,676,170,712\" 948,1660,95,812 1704,1944,152,818 ; luego stretch_juliana4.py. Coords en la imagen AMPLIADA.",
+ "rects_ampliados": {
+  "chevron": [
+   124,
+   202,
+   54,
+   118
+  ],
+  "kicker+raya": [
+   [
+    138,
+    190,
+    158,
+    400
+   ],
+   [
+    146,
+    180,
+    398,
+    600
+   ]
+  ],
+  "04+titulo": [
+   [
+    292,
+    420,
+    198,
+    396
+   ],
+   [
+    418,
+    676,
+    170,
+    712
+   ]
+  ],
+  "rect_video_gris": [
+   948,
+   1660,
+   95,
+   812
+  ],
+  "parrafo": [
+   1704,
+   1944,
+   152,
+   818
+  ]
+ }
+}

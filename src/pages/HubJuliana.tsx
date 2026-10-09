@@ -7,8 +7,7 @@ import Shell from "../kit/Shell"
  * /juliana · hub de Juliana Velásquez. Lienzo = public/juliana/bg.webp (942×1905, sin textos de la UI).
  * Origen: PDF índice 13 (942×1669), filas 77–1669 (la barra azul oscuro es la real del Shell), estirado sólo en papel
  * (tools/juliana.json + tools/stretch_juliana.py). Coordenadas: x = x del PDF; y = y NUEVA (mapa de stretch_juliana.py).
- * El título "DOS Y VEINTIDÓS" NO se borró: cruza el borde oscuro de la foto y el inpaint la dañaría, así que queda en la imagen
- * (h1 sólo para lectores de pantalla). Miniaturas, línea de tiempo con puntos, rayas, foto, luna y collage quedan en la imagen.
+ * El título es HTML ("LO QUE / PERMANECE"). El original "DOS Y VEINTIDÓS" estaba dibujado en el fondo y se borró con tools/juliana_clear_title.py.
  * Las filas llevan flecha (el PDF trae "+"), con la misma animación de toque que /mon y /silvana.
  */
 const W = 942, H = 1905
@@ -47,17 +46,17 @@ export default function HubJuliana() {
           className="relative left-1/2 -translate-x-1/2 [--k:calc(var(--w)/942)] [--w:max(min(100vw,480px),calc((100dvh-44px)*942/1905))]"
           style={{ width: "var(--w)", aspectRatio: `${W} / ${H}`, color: ink }}
         >
-          <img src="/juliana/bg.webp?v=1" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
-          <h1 className="sr-only">Dos y veintidós · Juliana Velásquez</h1>
+          <img src="/juliana/bg.webp?v=3" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
+          <h1 className="f-bodoni" aria-label="Lo que permanece">
+            <span aria-hidden className="absolute whitespace-nowrap [--tx:.77]" style={{ left: k(72), top: k(231), fontSize: k(88), lineHeight: k(88), fontWeight: 700, letterSpacing: ".02em", transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
+              LO QUE
+            </span>
+            <span aria-hidden className="absolute whitespace-nowrap [--tx:.77]" style={{ left: k(72), top: k(329), fontSize: k(88), lineHeight: k(88), fontWeight: 700, letterSpacing: ".02em", transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
+              PERMANECE
+            </span>
+          </h1>
 
-          <BackChevron to="/" label="Volver al inicio" cx={92} cy={79} color={ink} />
-          <p className="f-mont absolute whitespace-nowrap" style={{ left: k(140), top: k(62), fontSize: k(20.5), lineHeight: k(30), letterSpacing: ".1em", fontWeight: 400 }}>
-            JULIANA VELÁSQUEZ &nbsp;/&nbsp; 05
-          </p>
-          <p className="f-mont absolute whitespace-nowrap" style={{ left: k(780), top: k(62), fontSize: k(21), lineHeight: k(30), letterSpacing: ".2em", fontWeight: 400 }}>
-            05 / 05
-          </p>
-
+          <BackChevron to="/universos" label="Volver a los universos" cx={92} cy={79} color={ink} />
           <p className="f-bodoni absolute whitespace-nowrap [--tx:.762]" style={{ left: k(83), top: k(418), fontSize: k(56), lineHeight: k(60), fontStyle: "italic", fontWeight: 500, transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
             Juliana Velásquez
           </p>
@@ -81,7 +80,6 @@ export default function HubJuliana() {
                 className="group absolute block outline-none transition-[opacity,filter] duration-300"
                 style={{ left: k(104), top: k(r.top), width: k(816), height: k(r.h), opacity: off ? 0.3 : 1, filter: off ? "saturate(.4)" : undefined, "--c": blue } as CSSProperties}
               >
-                <span aria-hidden className={`arch-ring ${on ? "arch-go" : ""}`} style={{ left: 0, top: 0, width: "100%", height: "100%", borderRadius: k(8) }} />
 
                 <span className="f-mont absolute whitespace-nowrap" style={{ left: k(16), top: k(r.ny - r.top - 17), fontSize: k(26), lineHeight: k(34), letterSpacing: ".1em", fontWeight: 300 }}>
                   {r.n}
@@ -91,7 +89,7 @@ export default function HubJuliana() {
                 </span>
 
                 <span
-                  className={`absolute flex items-center justify-center overflow-hidden rounded-full border-[1.4px] transition-all duration-300 group-hover:bg-[#0b1220] group-hover:text-[#f3e9da] group-active:scale-95 ${on ? "scale-110 border-[var(--c)] bg-[var(--c)] text-[#f3e9da]" : "border-[#0b1220]"}`}
+                  className={`absolute flex items-center justify-center overflow-hidden rounded-full border-[1.4px] transition-all duration-300 group-active:scale-95 ${on ? "scale-110 " : ""}border-[#0b1220]`}
                   style={{ left: k(678), top: k(r.cy - r.top - 25), width: k(50), height: k(50) }}
                 >
                   <svg className={on ? "arrow-go" : "transition-transform duration-300 group-hover:translate-x-[8%]"} style={{ width: k(24), height: k(16) }} viewBox="0 0 18 12" fill="none" aria-hidden>

@@ -1,14 +1,17 @@
 import { Route, Routes } from "react-router"
 import { MenuProvider } from "./kit/Shell"
+import { JourneyTracker } from "./kit/journey"
 import Inicio from "./pages/Inicio"
 import Proyecto from "./pages/Proyecto"
 import Universos from "./pages/Universos"
-import Hub from "./pages/Hub"
 import HubMon from "./pages/HubMon"
 import HubSilvana from "./pages/HubSilvana"
 import HubJuliana from "./pages/HubJuliana"
 import JulianaMedida from "./pages/JulianaMedida"
 import JulianaCoseme from "./pages/JulianaCoseme"
+import JulianaDosDosDos from "./pages/JulianaDosDosDos"
+import JulianaMarAdentro from "./pages/JulianaMarAdentro"
+import Experiencia from "./pages/Experiencia"
 import SilvanaCasa from "./pages/SilvanaCasa"
 import SilvanaTeGuardo from "./pages/SilvanaTeGuardo"
 import SilvanaCorriente from "./pages/SilvanaCorriente"
@@ -17,11 +20,11 @@ import MonTuFalta from "./pages/MonTuFalta"
 import MonHacerseObra from "./pages/MonHacerseObra"
 import MonTrenza from "./pages/MonTrenza"
 import MonNoCaber from "./pages/MonNoCaber"
-import * as S from "./pages/Scenarios"
 
 export default function App() {
   return (
     <MenuProvider>
+      <JourneyTracker />
       <Routes>
         <Route path="/" element={<Inicio />} />
         <Route path="/proyecto" element={<Proyecto />} />
@@ -39,9 +42,9 @@ export default function App() {
         <Route path="/silvana-4" element={<SilvanaLluvias />} />
         <Route path="/juliana-1" element={<JulianaMedida />} />
         <Route path="/juliana-2" element={<JulianaCoseme />} />
-        <Route path="/juliana-3" element={<S.DosDosDos />} />
-        <Route path="/juliana-4" element={<S.MarAdentro />} />
-        <Route path="/experiencia" element={<S.Experiencia />} />
+        <Route path="/juliana-3" element={<JulianaDosDosDos />} />
+        <Route path="/juliana-4" element={<JulianaMarAdentro />} />
+        <Route path="/experiencia" element={<Experiencia />} />
         <Route path="*" element={<Inicio />} />
       </Routes>
     </MenuProvider>

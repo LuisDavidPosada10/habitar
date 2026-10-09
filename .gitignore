@@ -13,3 +13,8 @@ logs/
 .tmp-*
 
 .vercel
+
+!.env.example
+
+# capturas y archivos de trabajo (pesan ~170 MB)
+scratch/

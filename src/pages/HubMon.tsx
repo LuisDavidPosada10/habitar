@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from "react"
 import { Link, useNavigate } from "react-router"
+import BackChevron from "../kit/BackChevron"
 import Shell from "../kit/Shell"
 import { universes } from "../kit/data"
 
@@ -45,12 +46,10 @@ export default function HubMon() {
         >
           <img src="/mon/bg.webp?v=2" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
 
-          <p className="f-mont absolute whitespace-nowrap" style={{ left: X(137), top: Y(642), fontSize: k(21.8), lineHeight: k(26), letterSpacing: ".12em", fontWeight: 600 }}>
-            03 / UNIVERSO
-          </p>
+          <BackChevron to="/universos" label="Volver a los universos" cx={79} cy={68} color={ink} />
 
           <h1 className="f-bodoni absolute whitespace-nowrap [--tx:.75]" style={{ left: X(135), top: Y(683), fontSize: k(92), lineHeight: k(100), fontWeight: 500, letterSpacing: "-.02em", transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
-            AUTOPOÉTICA
+            LO QUE ARDE
           </h1>
           <h2 className="f-bodoni absolute whitespace-nowrap [--tx:.855]" style={{ left: X(135), top: Y(780), fontSize: k(56), lineHeight: k(64), fontWeight: 600, transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
             {u.artistLine}
@@ -76,7 +75,6 @@ export default function HubMon() {
                 className="group absolute block outline-none transition-[opacity,filter] duration-300"
                 style={{ left: X(92), top: Y(rowTop[i]), width: k(700), height: k(118), opacity: off ? 0.3 : 1, filter: off ? "saturate(.4)" : undefined, "--c": red } as CSSProperties}
               >
-                <span aria-hidden className={`arch-ring ${on ? "arch-go" : ""}`} style={{ left: k(60), top: 0, width: k(634), height: k(118), borderRadius: k(8) }} />
 
                 <span className="f-bodoni absolute whitespace-nowrap [--tx:.66]" style={{ left: k(72), top: k(26), fontSize: k(34), lineHeight: k(38), fontWeight: 500, transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
                   {s.n}
@@ -86,7 +84,7 @@ export default function HubMon() {
                 </span>
 
                 <span
-                  className={`absolute flex items-center justify-center overflow-hidden rounded-full border-[1.3px] transition-all duration-300 group-hover:bg-[#1d1611] group-hover:text-[#f3e9da] group-active:scale-95 ${on ? "scale-110 border-[var(--c)] bg-[var(--c)] text-[#f3e9da]" : "border-[#1d1611]"}`}
+                  className={`absolute flex items-center justify-center overflow-hidden rounded-full border-[1.3px] transition-all duration-300 group-active:scale-95 ${on ? "scale-110 " : ""}border-[#1d1611]`}
                   style={{ left: k(626), top: k(29), width: k(56), height: k(56) }}
                 >
                   <svg className={on ? "arrow-go" : "transition-transform duration-300 group-hover:translate-x-[8%]"} style={{ width: k(24), height: k(16) }} viewBox="0 0 18 12" fill="none" aria-hidden><path d="M1 6H17M12 1l5 5-5 5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>

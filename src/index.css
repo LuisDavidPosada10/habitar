@@ -54,25 +54,11 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 11px;
 .pillar-pop { transform-origin: 20% 30%; animation: pillar-pop .34s cubic-bezier(.2,.8,.3,1) both; }
 @media (prefers-reduced-motion: reduce) { .pillar-pop { animation: none; transform: rotate(-1deg); } }
 
-/* Universos: marco de arco (hover/foco) y animación al elegir un universo */
-.arch-ring {
-  position: absolute; pointer-events: none; opacity: 0; transform: scale(.985);
-  border: 2px solid var(--c);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 22%, transparent), 0 0 26px color-mix(in srgb, var(--c) 45%, transparent);
-  transition: opacity .3s ease, transform .35s cubic-bezier(.2,.8,.3,1);
-}
-.group:hover .arch-ring, .group:focus-visible .arch-ring { opacity: 1; transform: scale(1); }
-@keyframes arch-go {
-  0% { opacity: 1; transform: scale(1); background: color-mix(in srgb, var(--c) 0%, transparent); }
-  45% { opacity: 1; transform: scale(1.03); background: color-mix(in srgb, var(--c) 26%, transparent); }
-  100% { opacity: 0; transform: scale(1.14); background: color-mix(in srgb, var(--c) 0%, transparent); }
-}
-.arch-ring.arch-go { animation: arch-go .56s cubic-bezier(.3,.7,.3,1) both; }
 @keyframes star-go { 0% { transform: rotate(0) scale(1); } 100% { transform: rotate(180deg) scale(1.7); } }
 .star-go { animation: star-go .56s cubic-bezier(.3,.7,.3,1) both; }
 @keyframes arrow-go { 0% { transform: translateX(0); } 55% { transform: translateX(160%); opacity: 0; } 56% { transform: translateX(-160%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
 .arrow-go { animation: arrow-go .56s ease-in-out both; }
-@media (prefers-reduced-motion: reduce) { .star-go, .arrow-go, .arch-ring.arch-go { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .star-go, .arrow-go { animation: none; } }
 
 .seek-flat::-webkit-slider-thumb { appearance: none; width: 0; height: 0; }
 .seek-flat::-moz-range-thumb { width: 0; height: 0; border: 0; }
@@ -96,3 +82,32 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 11px;
 .touch-arc-1 { animation-delay: .32s; }
 .touch-dot { animation: touch-dot 2.6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .touch-hand, .touch-arc, .touch-dot { animation: none; opacity: 1; } }
+
+/* Entrada de página (kit/Shell.tsx): sutil y distinta según el nivel. `backwards` = al terminar no queda transform (los modales fixed siguen bien). */
+@keyframes pg-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes pg-hub { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes pg-scn { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+.pg-in { animation: pg-in .4s ease-out backwards; }
+.pg-hub { animation: pg-hub .6s cubic-bezier(.2,.8,.2,1) backwards; transform-origin: 50% 0; }
+.pg-scn { animation: pg-scn .5s cubic-bezier(.2,.8,.2,1) backwards; }
+
+/* Menú de hamburguesa: velo que aparece y opciones que suben una tras otra; al cerrar se desvanece */
+@keyframes menu-scrim-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes menu-scrim-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes menu-item-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.menu-scrim { animation: menu-scrim-in .3s ease both; }
+.menu-scrim.menu-out { animation: menu-scrim-out .24s ease both; }
+.menu-item { animation: menu-item-in .55s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i, 0) * 60ms + 100ms); }
+.menu-out .menu-item { animation: none; opacity: 0; transform: translateY(-6px); transition: opacity .2s ease, transform .2s ease; }
+
+/* /universos: flechita "Déjanos tu experiencia" (aparece al volver con los tres universos vistos) */
+@keyframes cta-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes cta-bob { 0%, 100% { transform: translateY(-2px); opacity: .7; } 50% { transform: translateY(13px); opacity: 1; } }
+@keyframes cta-down { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(34px); opacity: 0; } }
+.cta-in { animation: cta-in .8s cubic-bezier(.2,.8,.2,1) .6s backwards; }
+.cta-bob { animation: cta-bob 1.35s ease-in-out 1.2s infinite; }
+.cta-bob.cta-down { animation: cta-down .56s cubic-bezier(.3,.7,.3,1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .pg-in, .pg-hub, .pg-scn, .menu-scrim, .menu-item, .cta-in, .cta-bob { animation: none !important; }
+  .menu-out .menu-item { transition: none; }
+}

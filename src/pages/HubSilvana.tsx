@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from "react"
 import { Link, useNavigate } from "react-router"
+import BackChevron from "../kit/BackChevron"
 import Shell from "../kit/Shell"
 
 /**
@@ -15,12 +16,12 @@ const ink = "#1c231b"
 const green = "#6b7a4f"
 const GO_MS = 560
 
-type Row = { n: string; name: string[]; sub: string; to: string; tx: number; top: number; h: number; ny: number; nameY: number; subY: number; cy: number }
+type Row = { n: string; name: string[]; sub: string; to: string; tx: number; top: number; h: number; ny: number; nameY: number; subY: number; cy: number; fs?: number; lh?: number; nt?: number }
 const rows: Row[] = [
   { n: "01", name: ["CASA"], sub: "SEGUIR LA RAÍZ", to: "/silvana-1", tx: 0.66, top: 1050, h: 138, ny: 1061, nameY: 1112, subY: 1162, cy: 1110 },
   { n: "02", name: ["TE GUARDO"], sub: "CONSERVAR", to: "/silvana-2", tx: 0.66, top: 1242, h: 140, ny: 1272, nameY: 1311, subY: 1360, cy: 1314 },
   { n: "03", name: ["LA CORRIENTE"], sub: "DEJAR PASAR", to: "/silvana-3", tx: 0.66, top: 1436, h: 146, ny: 1473, nameY: 1514, subY: 1563, cy: 1513 },
-  { n: "04", name: ["VENDRÁN SUAVES", "LLUVIAS"], sub: "ESCUCHAR EL TIEMPO", to: "/silvana-4", tx: 0.57, top: 1640, h: 182, ny: 1676, nameY: 1716, subY: 1802, cy: 1717 },
+  { n: "04", name: ["VENDRÁN SUAVES", "LLUVIAS"], sub: "ESCUCHAR EL TIEMPO", to: "/silvana-4", tx: 0.62, fs: 40, lh: 42, nt: 58, top: 1640, h: 182, ny: 1676, nameY: 1716, subY: 1802, cy: 1717 },
 ]
 
 export default function HubSilvana() {
@@ -47,8 +48,10 @@ export default function HubSilvana() {
         >
           <img src="/silvana/bg.webp?v=2" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
 
-          <h1 className="f-bodoni absolute whitespace-nowrap [--tx:.743]" style={{ left: k(155), top: k(636), fontSize: k(114), lineHeight: k(100), fontWeight: 600, transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
-            SILVANA
+          <BackChevron to="/universos" label="Volver a los universos" cx={92} cy={79} color={ink} />
+
+          <h1 className="f-bodoni absolute whitespace-nowrap [--tx:.62]" style={{ left: k(155), top: k(658.2), fontSize: k(86), lineHeight: k(76), fontWeight: 600, transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
+            LO QUE FLORECE
           </h1>
           <p className="absolute whitespace-nowrap" style={{ left: k(157), top: k(788), fontFamily: "'Libre Caslon Text', serif", fontSize: k(25.1), lineHeight: k(31.5), color: "#2b2a22" }}>
             Un universo sensible donde la<br />introspección, la transformación<br />y la conexión con lo esencial<br />se encuentran.
@@ -69,12 +72,11 @@ export default function HubSilvana() {
                 className="group absolute block outline-none transition-[opacity,filter] duration-300"
                 style={{ left: k(196), top: k(r.top), width: k(712), height: k(r.h), opacity: off ? 0.3 : 1, filter: off ? "saturate(.4)" : undefined, "--c": green } as CSSProperties}
               >
-                <span aria-hidden className={`arch-ring ${on ? "arch-go" : ""}`} style={{ left: 0, top: 0, width: "100%", height: "100%", borderRadius: k(8) }} />
 
                 <span className="f-bodoni absolute whitespace-nowrap [--tx:.62]" style={{ left: k(24), top: k(r.ny - r.top - 6), fontSize: k(52), lineHeight: k(56), fontStyle: "italic", fontWeight: 400, color: "#bdae9d", transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
                   {r.n}
                 </span>
-                <span className="f-bodoni absolute whitespace-nowrap" style={{ left: k(24), top: k(r.nameY - r.top - 8), fontSize: k(44), lineHeight: k(34), fontStyle: "italic", fontWeight: 500, transform: `scaleX(${r.tx})`, transformOrigin: "left" }}>
+                <span className="f-bodoni absolute whitespace-nowrap" style={{ left: k(24), top: k(r.nt ?? r.nameY - r.top - 8), fontSize: k(r.fs ?? 44), lineHeight: k(r.lh ?? 34), fontStyle: "italic", fontWeight: 500, transform: `scaleX(${r.tx})`, transformOrigin: "left" }}>
                   {r.name.map((l, j) => (<span key={j} className="block">{l}</span>))}
                 </span>
                 <span className="f-mont absolute whitespace-nowrap" style={{ left: k(28), top: k(r.subY - r.top - 7), fontSize: k(11.3), lineHeight: k(14), letterSpacing: ".16em", fontWeight: 500, color: "#3b3a33" }}>
@@ -82,7 +84,7 @@ export default function HubSilvana() {
                 </span>
 
                 <span
-                  className={`absolute flex items-center justify-center overflow-hidden rounded-full border-[1.4px] transition-all duration-300 group-hover:bg-[#1c231b] group-hover:text-[#f3e9da] group-active:scale-95 ${on ? "scale-110 border-[var(--c)] bg-[var(--c)] text-[#f3e9da]" : "border-[#1c231b]"}`}
+                  className={`absolute flex items-center justify-center overflow-hidden rounded-full border-[1.4px] transition-all duration-300 group-active:scale-95 ${on ? "scale-110 " : ""}border-[#1c231b]`}
                   style={{ left: k(647), top: k(r.cy - r.top - 25), width: k(50), height: k(50) }}
                 >
                   <svg className={on ? "arrow-go" : "transition-transform duration-300 group-hover:translate-x-[8%]"} style={{ width: k(24), height: k(16) }} viewBox="0 0 18 12" fill="none" aria-hidden><path d="M1 6H17M12 1l5 5-5 5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>

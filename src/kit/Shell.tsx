@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, type CSSProperties, type ReactNode } from "react"
+import { createContext, useContext, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react"
 import { Link, useLocation } from "react-router"
 import { Crop } from "./Pieces"
 import { photos } from "./photos"
+import { useJourney } from "./journey"
 
 export type ThemeKey = "home" | "mon" | "silvana" | "juliana"
 
@@ -26,17 +27,40 @@ const Ctx = createContext<() => void>(() => {})
 
 export function MenuProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false)
+  const [closing, setClosing] = useState(false)
+  const timer = useRef<number>(0)
   const { pathname } = useLocation()
+  const journey = useJourney()
+  useEffect(() => () => window.clearTimeout(timer.current), [])
+
+  const openMenu = () => { window.clearTimeout(timer.current); setClosing(false); setOpen(true) }
+  // al cerrar: se desvanece (0.24 s) y luego se desmonta; con "reducir movimiento" se cierra al instante
+  const close = () => {
+    if (!open || closing) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return setOpen(false)
+    setClosing(true)
+    timer.current = window.setTimeout(() => { setOpen(false); setClosing(false) }, 240)
+  }
+  useEffect(() => {
+    if (!open) return
+    const key = (e: KeyboardEvent) => { if (e.key === "Escape") close() }
+    document.addEventListener("keydown", key)
+    return () => document.removeEventListener("keydown", key)
+  })
+
   return (
-    <Ctx.Provider value={() => setOpen(true)}>
+    <Ctx.Provider value={openMenu}>
       {children}
       {open && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-5 bg-[#1d1611]/96 text-[#f3e9da]" role="dialog" aria-label="Menú">
-          <button type="button" aria-label="Cerrar menú" onClick={() => setOpen(false)} className="absolute right-5 top-4 text-4xl leading-none">×</button>
-          <p className="mb-3 text-xs tracking-[.3em]" style={{ fontFamily: "Montserrat, sans-serif" }}>HABITAR LA MÚSICA</p>
-          {menuItems.map((m) => (
-            <Link key={m.to} to={m.to} onClick={() => setOpen(false)} className="text-[clamp(1.6rem,4vw,2.4rem)]" style={{ fontFamily: "'Bodoni Moda', serif", color: pathname === m.to ? "#e0525b" : undefined }}>
+        <div className={`menu-scrim ${closing ? "menu-out" : ""} fixed inset-0 z-50 flex flex-col items-center justify-center gap-5 bg-[#1d1611]/96 text-[#f3e9da]`} role="dialog" aria-label="Menú">
+          <button type="button" aria-label="Cerrar menú" onClick={close} className="menu-item absolute right-5 top-4 text-4xl leading-none" style={{ "--i": 0 } as CSSProperties}>×</button>
+          <p className="menu-item mb-3 text-xs tracking-[.3em]" style={{ fontFamily: "Montserrat, sans-serif", "--i": 0 } as CSSProperties}>HABITAR LA MÚSICA</p>
+          {menuItems.map((m, i) => (
+            <Link key={m.to} to={m.to} onClick={close} className="menu-item text-[clamp(1.6rem,4vw,2.4rem)]" style={{ fontFamily: "'Bodoni Moda', serif", color: pathname === m.to ? "#e0525b" : undefined, "--i": i + 1 } as CSSProperties}>
               {m.label}
+              {m.to === "/experiencia" && journey.all && !journey.sent && (
+                <span aria-label="Disponible: ya recorriste los tres universos" className="ml-3 inline-block size-2.5 -translate-y-1 rounded-full bg-[#e0525b]" />
+              )}
             </Link>
           ))}
         </div>
@@ -56,6 +80,9 @@ export default function Shell({
   theme = "home", label = "HABITAR LA MÚSICA", counter, bar = true, children, className = "",
 }: { theme?: ThemeKey; label?: string; counter?: string; bar?: boolean; children: ReactNode; className?: string }) {
   const openMenu = useContext(Ctx)
+  const { pathname } = useLocation()
+  // entrada de página: hub de universo (más lenta), escenarios (desliza) y el resto (fundido)
+  const pg = /^\/(mon|silvana|juliana)\/?$/.test(pathname) ? "pg-hub" : /-\d\/?$/.test(pathname) ? "pg-scn" : "pg-in"
   const t = themes[theme]
   const vars = { "--ink": t.ink, "--accent": t.accent, "--bar": t.bar, "--soft": t.soft } as CSSProperties
   const fg = bar ? "#f3e9da" : t.ink
@@ -76,7 +103,7 @@ export default function Shell({
           <Crop photo={photos.decor[theme][1]} style={decorW(photos.decor[theme][1])} className="pointer-events-none absolute bottom-0 right-0 z-0  fade [--fr:0%] [--fb:0%]" />
         </>
       )}
-      <div className={`relative z-10 ${className}`}>{children}</div>
+      <div className={`relative z-10 ${pg} ${className}`}>{children}</div>
     </div>
   )
 }

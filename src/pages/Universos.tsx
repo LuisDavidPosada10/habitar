@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from
 import { Link, useNavigate } from "react-router"
 import Shell from "../kit/Shell"
 import { universes } from "../kit/data"
+import { useJourney } from "../kit/journey"
 
 /**
  * Mobile-first sobre el lienzo de public/universos/bg.webp (1024×2188, sin texto).
@@ -28,6 +29,9 @@ const names = { mon: ["MON LAFERTE", 0.745], silvana: ["SILVANA ESTRADA", 0.64],
 export default function Universos() {
   const nav = useNavigate()
   const [go, setGo] = useState<string | null>(null)
+  const [ctaGo, setCtaGo] = useState(false)
+  const journey = useJourney()
+  const showCta = journey.all && !journey.sent   // ya entró a los tres universos y aún no dejó su experiencia
   const timer = useRef<number>(0)
   useEffect(() => () => window.clearTimeout(timer.current), [])
 
@@ -39,6 +43,16 @@ export default function Universos() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return nav(to)
     setGo(key)
     timer.current = window.setTimeout(() => nav(to), GO_MS)
+  }
+
+  // Misma animación de toque que los universos (flecha que avanza, círculo que se rellena) y luego navega a /experiencia.
+  const enterCta = (e: MouseEvent) => {
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return
+    e.preventDefault()
+    if (go || ctaGo) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return nav("/experiencia")
+    setCtaGo(true)
+    timer.current = window.setTimeout(() => nav("/experiencia"), GO_MS)
   }
 
   return (
@@ -65,7 +79,7 @@ export default function Universos() {
           {cols.map((c) => {
             const u = universes[c.key]
             const on = go === c.key
-            const off = go !== null && !on
+            const off = (go !== null && !on) || ctaGo
             const lx = c.cx - 160, LT = ARCH_TOP - 10
             return (
               <Link
@@ -77,7 +91,6 @@ export default function Universos() {
                 style={{ left: k(lx), top: k(LT), width: k(320), height: k(940), opacity: off ? 0.28 : 1, filter: off ? "saturate(.4)" : undefined, "--c": c.star } as CSSProperties}
               >
                 {/* marco del arco: aparece al pasar/enfocar y "late" al elegir */}
-                <span aria-hidden className={`arch-ring ${on ? "arch-go" : ""}`} style={{ left: k(c.arch - lx), top: k(ARCH_TOP - LT), width: k(ARCH_W), height: k(ARCH_BOT - ARCH_TOP), borderRadius: `${k(150)} ${k(150)} 0 0` }} />
 
                 <span className="f-bodoni absolute inset-x-0 text-center" style={{ top: k(1179 - LT - 17), fontSize: k(28), lineHeight: k(34) }}>{u.index}</span>
                 <span className="f-bodoni absolute inset-x-0 text-center whitespace-nowrap" style={{ top: k(1219 - LT - 22), fontSize: k(38), lineHeight: k(44), fontWeight: 500, transform: `scaleX(${names[c.key][1]})` }}>
@@ -87,23 +100,34 @@ export default function Universos() {
                   {u.album}
                 </span>
                 <span
-                  className={`absolute flex items-center justify-center overflow-hidden rounded-full border-[1.3px] transition-all duration-300 group-hover:bg-[#1d1611] group-hover:text-[#f3e9da] group-active:scale-95 ${on ? "scale-110 border-[var(--c)] bg-[var(--c)] text-[#f3e9da]" : "border-[#1d1611]"}`}
+                  className={`absolute flex items-center justify-center overflow-hidden rounded-full border-[1.3px] transition-all duration-300 group-active:scale-95 ${on ? "scale-110 " : ""}border-[#1d1611]`}
                   style={{ left: k(160 - 31), top: k(1376 - LT - 31), width: k(62), height: k(62) }}
                 >
                   <svg className={on ? "arrow-go" : "transition-transform duration-300 group-hover:translate-x-[8%]"} style={{ width: k(26), height: k(18) }} viewBox="0 0 18 12" fill="none" aria-hidden><path d="M1 6H17M12 1l5 5-5 5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </span>
-                <span className={`absolute transition-transform duration-300 group-hover:scale-110 ${on ? "star-go" : ""}`} style={{ left: k(160 - 28), top: k(1531 - LT - 42), width: k(56), height: k(84) }}>
-                  <svg className="size-full" viewBox="-10 -10 20 20" preserveAspectRatio="none" fill={c.star} aria-hidden>
-                    <path d="M0-10 1.2-1.2 10 0 1.2 1.2 0 10-1.2 1.2-10 0-1.2-1.2Z" />
-                  </svg>
                 </span>
               </Link>
             )
           })}
 
-          <p className="f-bodoni absolute inset-x-0 text-center whitespace-nowrap italic transition-opacity duration-300" style={{ top: k(1730), fontSize: k(26), lineHeight: k(38), color: "#2b1b0e", opacity: go ? 0.3 : 1 }}>
+          <p className="f-bodoni absolute inset-x-0 text-center whitespace-nowrap italic transition-opacity duration-300" style={{ top: k(1588), fontSize: k(26), lineHeight: k(38), color: "#2b1b0e", opacity: go || ctaGo ? 0.3 : 1 }}>
             La música también<br />nos habita, de lugar en lugar.
           </p>
+
+          {showCta && (
+            <Link
+              to="/experiencia" onClick={enterCta} aria-label="Déjanos tu experiencia"
+              className="cta-in group absolute flex flex-col items-center outline-none"
+              style={{ left: k(232), top: k(1712), width: k(560), height: k(124) }}
+            >
+              {/* flecha hacia abajo sobre el texto: se mece suave y, al tocarla, cae y se desvanece antes de navegar */}
+              <svg className={`cta-bob ${ctaGo ? "cta-down" : ""} transition-transform duration-300 group-hover:translate-y-[3px]`} style={{ width: k(30), height: k(54) }} viewBox="0 0 26 46" fill="none" aria-hidden>
+                <path d="M13 2v40M3 31l10 11 10-11" stroke="#1d1611" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span className="f-mont whitespace-nowrap transition-opacity duration-300" style={{ marginTop: k(38), fontSize: k(20.5), letterSpacing: ".2em", fontWeight: 500, color: "#2b1b0e", opacity: ctaGo ? 0.4 : 1 }}>
+                DÉJANOS TU EXPERIENCIA
+              </span>
+            </Link>
+          )}
         </div>
       </div>
     </Shell>

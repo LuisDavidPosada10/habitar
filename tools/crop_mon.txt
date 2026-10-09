@@ -1,0 +1,2 @@
+Mon (PDF índice 3, 850×1796, marco negro): clean_bg.py p3.jpg m_clean.png tools/mon.json  (crop x 21–829) y luego recortar filas 54:1712 → public/mon/bg.webp (808×1662).
+Y1=1712 se eligió para que, con la barra roja real de 44 px, no haya scroll en 390×844 (ratio ≤ 2.05).

@@ -1,0 +1,98 @@
+@import "tailwindcss";
+@import "./fonts.css";
+@import "@fontsource/homemade-apple/latin-400.css";
+
+html, body, #root { margin: 0; min-height: 100%; background: #efe0c8; }
+body { font-family: 'EB Garamond', serif; -webkit-font-smoothing: antialiased; }
+button, a { -webkit-tap-highlight-color: transparent; cursor: pointer; }
+button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 2px solid #b3141c; outline-offset: 3px; }
+
+/* Papel envejecido: color base + manchas suaves + grano */
+.paper {
+  background-color: #f0e1ca;
+  background-image:
+    radial-gradient(60% 40% at 15% 12%, rgba(205,170,120,.28), transparent 70%),
+    radial-gradient(50% 35% at 88% 45%, rgba(190,150,100,.22), transparent 70%),
+    radial-gradient(70% 40% at 30% 92%, rgba(200,160,110,.25), transparent 70%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .38  0 0 0 0 .22  0 0 0 .22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.paper-grain {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .33  0 0 0 0 .2  0 0 0 .3 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Pequeños utilitarios tipográficos */
+.f-mont { font-family: Montserrat, sans-serif; }
+.f-bodoni { font-family: 'Bodoni Moda', serif; }
+.f-play { font-family: 'Playfair Display', serif; }
+.f-mono { font-family: 'IBM Plex Mono', monospace; }
+.f-caslon { font-family: 'Libre Caslon Text', serif; }
+
+@keyframes ripple { from { width: 8px; height: 8px; opacity: .9 } to { width: 220px; height: 220px; opacity: 0 } }
+@keyframes breathe { 0%,100% { transform: translate(-50%,-50%) scale(.7) } 50% { transform: translate(-50%,-50%) scale(1.5) } }
+@media (prefers-reduced-motion: reduce) { * { animation-duration: .01ms !important; animation-iteration-count: 1 !important } }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 11px; height: 11px; border-radius: 50%; background: currentColor; }
+
+/* Desvanece los bordes de un recorte para que se funda con el papel. Pon --fl/--fr/--ft/--fb en 0% en los lados que tocan el borde de la pantalla. */
+.fade {
+  --fl: 26%; --fr: 26%; --ft: 26%; --fb: 26%;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 var(--fl), #000 calc(100% - var(--fr)), transparent),
+    linear-gradient(to bottom, transparent, #000 var(--ft), #000 calc(100% - var(--fb)), transparent);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(to right, transparent, #000 var(--fl), #000 calc(100% - var(--fr)), transparent),
+    linear-gradient(to bottom, transparent, #000 var(--ft), #000 calc(100% - var(--fb)), transparent);
+          mask-composite: intersect;
+}
+
+/* Proyecto: cuadrito de descripción de cada pilar */
+@keyframes pillar-pop {
+  0% { opacity: 0; transform: translateY(10px) scale(.9) rotate(-2.5deg); }
+  60% { opacity: 1; transform: translateY(-2px) scale(1.02) rotate(-.6deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(-1deg); }
+}
+.pillar-pop { transform-origin: 20% 30%; animation: pillar-pop .34s cubic-bezier(.2,.8,.3,1) both; }
+@media (prefers-reduced-motion: reduce) { .pillar-pop { animation: none; transform: rotate(-1deg); } }
+
+/* Universos: marco de arco (hover/foco) y animación al elegir un universo */
+.arch-ring {
+  position: absolute; pointer-events: none; opacity: 0; transform: scale(.985);
+  border: 2px solid var(--c);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 22%, transparent), 0 0 26px color-mix(in srgb, var(--c) 45%, transparent);
+  transition: opacity .3s ease, transform .35s cubic-bezier(.2,.8,.3,1);
+}
+.group:hover .arch-ring, .group:focus-visible .arch-ring { opacity: 1; transform: scale(1); }
+@keyframes arch-go {
+  0% { opacity: 1; transform: scale(1); background: color-mix(in srgb, var(--c) 0%, transparent); }
+  45% { opacity: 1; transform: scale(1.03); background: color-mix(in srgb, var(--c) 26%, transparent); }
+  100% { opacity: 0; transform: scale(1.14); background: color-mix(in srgb, var(--c) 0%, transparent); }
+}
+.arch-ring.arch-go { animation: arch-go .56s cubic-bezier(.3,.7,.3,1) both; }
+@keyframes star-go { 0% { transform: rotate(0) scale(1); } 100% { transform: rotate(180deg) scale(1.7); } }
+.star-go { animation: star-go .56s cubic-bezier(.3,.7,.3,1) both; }
+@keyframes arrow-go { 0% { transform: translateX(0); } 55% { transform: translateX(160%); opacity: 0; } 56% { transform: translateX(-160%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+.arrow-go { animation: arrow-go .56s ease-in-out both; }
+@media (prefers-reduced-motion: reduce) { .star-go, .arrow-go, .arch-ring.arch-go { animation: none; } }
+
+.seek-flat::-webkit-slider-thumb { appearance: none; width: 0; height: 0; }
+.seek-flat::-moz-range-thumb { width: 0; height: 0; border: 0; }
+
+/* Mon-3: ficha de tarjeta */
+@keyframes ficha-scrim { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ficha-panel { from { opacity: 0; transform: translateY(26px) scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes ficha-swap { from { opacity: 0; transform: translateX(calc(var(--dir, 1) * 28px)); } to { opacity: 1; transform: none; } }
+.ficha-scrim { background: rgba(20, 8, 4, .62); backdrop-filter: blur(3px); animation: ficha-scrim .25s ease both; }
+.ficha-panel { animation: ficha-panel .38s cubic-bezier(.2,.9,.3,1.05) both; }
+.ficha-swap { animation: ficha-swap .32s cubic-bezier(.2,.8,.3,1) both; }
+@media (prefers-reduced-motion: reduce) { .ficha-scrim, .ficha-panel, .ficha-swap { animation: none; } }
+
+/* Silvana-3: pista "toca y descubre" (las ondas del agua son un canvas, ver kit/WaterPond.tsx) */
+@keyframes touch-tap { 0%, 55%, 100% { transform: translateY(0) scale(1); } 22% { transform: translateY(5%) scale(.97); } }
+@keyframes touch-arc { 0%, 100% { opacity: .55; transform: scale(1); } 35% { opacity: 1; transform: scale(1.07); } }
+@keyframes touch-dot { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+.touch-hand { animation: touch-tap 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+.touch-arc { transform-box: fill-box; transform-origin: 50% 100%; animation: touch-arc 2.6s ease-out infinite; }
+.touch-arc-2 { animation-delay: .12s; }
+.touch-arc-1 { animation-delay: .32s; }
+.touch-dot { animation: touch-dot 2.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .touch-hand, .touch-arc, .touch-dot { animation: none; opacity: 1; } }

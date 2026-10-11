@@ -7,15 +7,8 @@ body { font-family: 'EB Garamond', serif; -webkit-font-smoothing: antialiased; }
 button, a { -webkit-tap-highlight-color: transparent; cursor: pointer; }
 button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 2px solid #b3141c; outline-offset: 3px; }
 
-/* Papel envejecido: color base + manchas suaves + grano */
-.paper {
-  background-color: #f0e1ca;
-  background-image:
-    radial-gradient(60% 40% at 15% 12%, rgba(205,170,120,.28), transparent 70%),
-    radial-gradient(50% 35% at 88% 45%, rgba(190,150,100,.22), transparent 70%),
-    radial-gradient(70% 40% at 30% 92%, rgba(200,160,110,.25), transparent 70%),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .38  0 0 0 0 .22  0 0 0 .22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-}
+/* Papel: color plano del diseño nuevo (el mismo que traen las imágenes de fondo) */
+.paper { background-color: #efe8df; }
 .paper-grain {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .33  0 0 0 0 .2  0 0 0 .3 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }

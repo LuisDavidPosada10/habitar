@@ -1,43 +1,56 @@
 import { Link } from "react-router"
 import Shell from "../kit/Shell"
-import { Star } from "../kit/Pieces"
+import { Star8 } from "../kit/Pieces"
 
 /**
- * Mobile-first. El diseño es de 882×1664: el fondo (public/inicio/bg.webp, sin texto)
- * se escala al ancho de la pantalla y todo el texto se posiciona (en unidades --u = 1% del
- * ancho del lienzo) sobre ese mismo lienzo, así que calza en cualquier móvil. Si la pantalla
- * es más alta que el lienzo, éste crece hasta cubrir el alto (recorta un poco a los lados).
+ * Mobile-first. Diseño nuevo de 1179×2556 (PDF "Pagina Web - Diseño"): el fondo (public/inicio/bg.webp) es el
+ * render de la página SIN texto (el papel es color plano #efe8df, se rellenó con ese color); estrella, pastilla,
+ * título, párrafo y botón son HTML posicionado en unidades del lienzo (--k = ancho_css / 1179).
+ * Barra transparente (Shell bar={false}) y el lienzo cubre el alto (ratio 2.168).
  */
+const k = (n: number) => `calc(var(--k) * ${n})`
+const TIT = [558, 744]
+const INK = "#3a1010"
+
 export default function Inicio() {
   return (
-    <Shell bar={false} className="-mt-11 min-h-dvh overflow-hidden">
-      <div className="relative left-1/2 w-[var(--w)] -translate-x-1/2 [--u:calc(var(--w)/100)] [--w:max(min(100vw,480px),53dvh)]" style={{ aspectRatio: "882 / 1664" }}>
-        <img
-          src="/inicio/bg.webp" alt="" aria-hidden
-          className="pointer-events-none absolute inset-0 size-full"
-        />
+    <Shell bar={false} label="" className="-mt-11 min-h-dvh overflow-x-clip">
+      <div
+        className="relative left-1/2 w-[var(--w)] -translate-x-1/2 [--k:calc(var(--w)/1179)] [--w:max(min(100vw,480px),calc(100dvh*1179/2556))]"
+        style={{ aspectRatio: "1179 / 2556" }}
+      >
+        <img src="/inicio/bg.webp?v=2" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
 
-        <Star size={30} className="absolute left-1/2 top-[7.6%] -translate-x-1/2" />
-        <p className="f-mont absolute inset-x-0 top-[12.2%] text-center text-[calc(var(--u)*2.3)] leading-[1.55] tracking-[.24em]">
-          UNA EXPERIENCIA<br />ENTRE PAPEL Y SONIDO
-        </p>
-        <h1
-          className="absolute inset-x-0 top-[17%] whitespace-nowrap text-center leading-[.88] [transform:scaleX(.67)]"
-          style={{ fontFamily: "'Bodoni Moda', serif", fontWeight: 500, fontSize: "calc(var(--u) * 17.5)" }}
+        <Star8 className="absolute" style={{ left: k(559.5), top: k(229.5), width: k(59), height: k(59) }} />
+
+        <div
+          className="absolute flex flex-col items-center justify-center text-center"
+          style={{ left: k(287), top: k(308), width: k(597), height: k(122), borderRadius: k(46), border: `${k(1.2)} solid #461e1d`, color: INK, fontFamily: "Comfortaa, sans-serif", fontWeight: 400, fontSize: k(39.3), lineHeight: k(41), paddingTop: k(8) }}
         >
-          HABITAR<br />LA MÚSICA<span className="text-[#b3141c]">.</span>
+          <span className="whitespace-nowrap">Una experiencia</span>
+          <span className="whitespace-nowrap">Entre el papel y el sonido</span>
+        </div>
+
+        <h1 className="m-0 font-normal" style={{ color: "#11110f", fontFamily: "'Bodoni Static', serif" }}>
+          <span className="absolute inset-x-0 whitespace-nowrap text-center" style={{ top: k(TIT[0]), fontStyle: "italic", fontWeight: 600, fontSize: k(215), lineHeight: k(215), transform: `translateX(${k(-4)})` }}>Habitar</span>
+          <span className="absolute inset-x-0 whitespace-nowrap text-center" style={{ top: k(TIT[1]), fontWeight: 700, fontSize: k(212), lineHeight: k(212), transform: `translateX(${k(-5)}) scaleX(.913)` }}>la Música</span>
         </h1>
-        <p className="absolute inset-x-0 top-[35%] mx-auto w-[45%] text-center text-[calc(var(--u)*3.7)] leading-[1.22]">
-          Una colección de tres fanzines que explora cómo la música nos habita, nos transforma y nos acompaña en distintas formas de vivir.
+
+        <p
+          className="absolute whitespace-nowrap text-center"
+          style={{ left: k(190), width: k(774), top: k(1081), color: "#11110f", fontFamily: "Montserrat, sans-serif", fontStyle: "italic", fontWeight: 600, fontSize: k(34), lineHeight: k(35) }}
+        >
+          Una colección de tres fanzines<br />que explora cómo la música nos<br />habita, nos transforma y nos<br />acompaña en distintas formas<br />de vivir.
         </p>
+
         <Link
           to="/proyecto"
-          className="f-mont absolute left-[30.2%] top-[49.3%] flex h-[5.3%] w-[39.7%] items-center justify-center gap-[calc(var(--u)*3)] rounded-full border-[1.3px] border-[#1d1611] text-[calc(var(--u)*2.5)] font-medium tracking-[.3em] transition hover:bg-[#1d1611] hover:text-[#f3e9da]"
+          className="absolute flex items-center justify-center"
+          style={{ left: k(356), top: k(1366), width: k(466), height: k(119), borderRadius: k(58), border: `${k(1.2)} solid #461e1d`, color: INK, gap: k(34), paddingBottom: k(7), fontFamily: "'Bodoni Moda', serif", fontWeight: 600, fontSize: k(52) }}
         >
-          EXPLORAR
-          <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden><path d="M1 6H17M12 1l5 5-5 5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          Explorar
+          <svg viewBox="0 0 54 36" style={{ width: k(58), height: k(39) }} fill="none" aria-hidden><path d="M1 18H52M36 3l16 15-16 15" stroke="currentColor" strokeWidth="3.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </Link>
-
       </div>
     </Shell>
   )

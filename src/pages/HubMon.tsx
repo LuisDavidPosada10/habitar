@@ -5,20 +5,31 @@ import Shell from "../kit/Shell"
 import { universes } from "../kit/data"
 
 /**
- * Mobile-first sobre el lienzo de public/mon/bg.webp (808×1658, sin texto).
- * Origen: PDF índice 3 (850×1796, marco negro): columnas 21–829, filas 54–1712 (tools/mon.json + crop_mon.txt).
- * Coordenadas del diseño: X(x)=x-21, Y(y)=y-54. Miniaturas, línea de tiempo y separadores quedan en la imagen.
- * La barra roja es la real del Shell (44 px), el lienzo empieza debajo.
+ * Diseño nuevo (PDF "Pagina Web - Diseño", pág. 4, 1179×2556). El fondo (public/mon/bg.webp) es el render SIN texto:
+ * collage de Mon, estrellas, línea de tiempo, miniaturas, reglas, sello y mariposa quedan en la imagen; el papel es de
+ * color plano #efe8df. Título, nombre, párrafo, números, títulos de fila y círculos con flecha son HTML en unidades del
+ * lienzo (--k = ancho_css / 1179). Barra transparente; el lienzo cubre el alto.
  */
-const W = 808, H = 1658
+const W = 1179, H = 2556
 const k = (n: number) => `calc(var(--k) * ${n})`
-const X = (x: number) => k(x - 21)
-const Y = (y: number) => k(y - 54)
 const GO_MS = 560
+const bodoni = { fontFamily: "'Bodoni Moda', serif" } as const
+const bodoniIt = { fontFamily: "'Bodoni Static', 'Bodoni Moda', serif", fontStyle: "italic", fontWeight: 700 } as const
+const mont = { fontFamily: "Montserrat, sans-serif", fontStyle: "italic", fontWeight: 600, color: "#11110f" } as const
+const RED = "#631413"
+const LINE = "#7f6360"
+const RING = "#5e3f3c"
 
-const ink = "#1d1611"
-const red = "#8a1620"
-const rowTop = [1085, 1212, 1341, 1469] // y (diseño) del borde superior de cada fila
+// Filas: top del enlace, tops de la tinta del número / título / círculo y x de cada uno (lienzo)
+const LX = 225, LW = 830, LH = 190
+const rows = [
+  { top: 1538, num: [247, 1620], tit: [246, 1665], ci: 1636 },
+  { top: 1737, num: [239, 1817], tit: [236, 1863], ci: 1839 },
+  { top: 1940, num: [237, 2019], tit: [234, 2063], ci: 2014 },
+  { top: 2137, num: [231, 2225], tit: [231, 2272], ci: 2220 },
+] as const
+const titles = ["No Caber", "Tu falta de querer", "Hacerse obra", "La trenza"]
+const NUM_DY = -4, TIT_DY = -6     // ajuste fino medido: la tinta queda más abajo/arriba del top de la caja
 
 export default function HubMon() {
   const u = universes.mon
@@ -27,7 +38,7 @@ export default function HubMon() {
   const timer = useRef<number>(0)
   useEffect(() => () => window.clearTimeout(timer.current), [])
 
-  // Animación breve (marco de la fila, círculo que se rellena, flecha que avanza) y luego navega.
+  // Animación breve (flecha que avanza, las demás filas se atenúan) y luego navega.
   const enter = (e: MouseEvent, i: number, to: string) => {
     if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return
     e.preventDefault()
@@ -38,61 +49,62 @@ export default function HubMon() {
   }
 
   return (
-    <Shell theme="mon">
-      <div className="min-h-[calc(100dvh-44px)]" style={{ background: "#cdac91" }}>
-        <div
-          className="relative mx-auto [--k:calc(var(--w)/808)] [--w:min(100vw,480px)]"
-          style={{ width: "var(--w)", aspectRatio: `${W} / ${H}`, color: ink }}
-        >
-          <img src="/mon/bg.webp?v=2" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
+    <Shell theme="mon" bar={false} label="" className="-mt-11 min-h-dvh overflow-x-clip">
+      <div
+        className="relative left-1/2 w-[var(--w)] -translate-x-1/2 [--k:calc(var(--w)/1179)] [--w:max(min(100vw,480px),calc(100dvh*1179/2556))]"
+        style={{ aspectRatio: `${W} / ${H}`, color: "#11110f" }}
+      >
+        <img src="/mon/bg.webp?v=4" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
 
-          <BackChevron to="/universos" label="Volver a los universos" cx={79} cy={68} color={ink} />
+        <p data-m="hdr" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ ...bodoni, top: k(59), fontSize: k(62), lineHeight: k(70), fontWeight: 600, transform: "scaleX(.912)" }}>
+          Habitar la música
+        </p>
 
-          <h1 className="f-bodoni absolute whitespace-nowrap [--tx:.75]" style={{ left: X(135), top: Y(683), fontSize: k(92), lineHeight: k(100), fontWeight: 500, letterSpacing: "-.02em", transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
-            LO QUE ARDE
-          </h1>
-          <h2 className="f-bodoni absolute whitespace-nowrap [--tx:.855]" style={{ left: X(135), top: Y(780), fontSize: k(56), lineHeight: k(64), fontWeight: 600, transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
-            {u.artistLine}
-          </h2>
+        <BackChevron to="/universos" label="Volver a los universos" cx={104} cy={183} color="#3a1010" />
 
-          <p className="absolute whitespace-nowrap" style={{ left: X(137), top: Y(859), fontFamily: "'Libre Caslon Text', serif", fontSize: k(29.5), lineHeight: k(36.5), color: "#2b1b0e" }}>
-            Un universo construido desde<br />la visceralidad, la contradicción,<br />la pasión y la transformación.
-          </p>
+        <h1 data-m="title" className="absolute whitespace-nowrap font-normal" style={{ ...bodoniIt, left: k(78), top: k(901), fontSize: k(156), lineHeight: k(156), color: RED, transform: "scaleX(1.013)", transformOrigin: "left" }}>
+          Lo que Arde
+        </h1>
 
-          <p className="f-mont absolute whitespace-nowrap" style={{ left: X(95), top: Y(1040), fontSize: k(22), lineHeight: k(24), letterSpacing: ".12em", fontWeight: 500 }}>
-            EXPLORA LOS ESCENARIOS
-          </p>
+        <div className="absolute" style={{ left: k(75), top: k(1121), width: k(397), height: k(89), borderRadius: k(45), border: `${k(1.3)} solid ${LINE}` }} />
+        <h2 data-m="name" className="absolute whitespace-nowrap font-normal" style={{ ...bodoniIt, left: k(107), top: k(1129), fontSize: k(58), lineHeight: k(76), color: "#000" }}>
+          {u.artistLine}
+        </h2>
 
-          {u.scenarios.map((s, i) => {
-            const on = go === i
-            const off = go !== null && !on
-            return (
-              <Link
-                key={s.to}
-                to={s.to}
-                onClick={(e) => enter(e, i, s.to)}
-                aria-label={`${s.n} ${s.title}`}
-                className="group absolute block outline-none transition-[opacity,filter] duration-300"
-                style={{ left: X(92), top: Y(rowTop[i]), width: k(700), height: k(118), opacity: off ? 0.3 : 1, filter: off ? "saturate(.4)" : undefined, "--c": red } as CSSProperties}
+        <p data-m="para" className="absolute whitespace-nowrap" style={{ ...mont, left: k(84), top: k(1262), fontSize: k(36), lineHeight: k(35) }}>
+          Un universo construido desde<br />la visceralidad, la contradicción,<br />la pasión y la transformación.
+        </p>
+
+        <p data-m="explora" className="absolute whitespace-nowrap" style={{ ...mont, fontWeight: 500, left: k(137), top: k(1464), fontSize: k(36), lineHeight: k(44) }}>
+          Explora los escenarios
+        </p>
+
+        {u.scenarios.map((s, i) => {
+          const r = rows[i]
+          const on = go === i
+          const off = go !== null && !on
+          const title = titles[i]
+          return (
+            <Link
+              key={s.to}
+              to={s.to}
+              onClick={(e) => enter(e, i, s.to)}
+              aria-label={`${s.n} ${s.title}`}
+              className="group absolute block outline-none transition-[opacity,filter] duration-300"
+              style={{ left: k(LX), top: k(r.top), width: k(LW), height: k(LH), opacity: off ? 0.3 : 1, filter: off ? "saturate(.4)" : undefined } as CSSProperties}
+            >
+              <span data-m={`num${i}`} className="absolute whitespace-nowrap" style={{ ...bodoniIt, left: k(r.num[0] - LX - 4), top: k(r.num[1] - r.top + NUM_DY), fontSize: k(46), lineHeight: k(50), fontWeight: 700, color: RED, transform: "scaleX(1.15)", transformOrigin: "left" }}>{s.n}</span>
+              <span data-m={`tt${i}`} className="absolute whitespace-nowrap" style={{ ...bodoniIt, left: k(r.tit[0] - LX), top: k(r.tit[1] - r.top + TIT_DY), fontSize: k(40.5), lineHeight: k(50), color: "#000" }}>{title}</span>
+              <span
+                data-m={`ci${i}`}
+                className={`absolute flex items-center justify-center overflow-hidden rounded-full transition-transform duration-300 group-active:scale-95 ${on ? "scale-110" : ""}`}
+                style={{ left: k(926 - LX), top: k(r.ci - r.top), width: k(72), height: k(72), border: `${k(1.3)} solid ${RING}`, color: "#3a1010" }}
               >
-
-                <span className="f-bodoni absolute whitespace-nowrap [--tx:.66]" style={{ left: k(72), top: k(26), fontSize: k(34), lineHeight: k(38), fontWeight: 500, transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
-                  {s.n}
-                </span>
-                <span className="f-bodoni absolute whitespace-nowrap [--tx:.56]" style={{ left: k(72), top: k(58), fontSize: k(36), lineHeight: k(42), fontWeight: 500, transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
-                  {s.title}
-                </span>
-
-                <span
-                  className={`absolute flex items-center justify-center overflow-hidden rounded-full border-[1.3px] transition-all duration-300 group-active:scale-95 ${on ? "scale-110 " : ""}border-[#1d1611]`}
-                  style={{ left: k(626), top: k(29), width: k(56), height: k(56) }}
-                >
-                  <svg className={on ? "arrow-go" : "transition-transform duration-300 group-hover:translate-x-[8%]"} style={{ width: k(24), height: k(16) }} viewBox="0 0 18 12" fill="none" aria-hidden><path d="M1 6H17M12 1l5 5-5 5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </span>
-              </Link>
-            )
-          })}
-        </div>
+                <svg className={on ? "arrow-go" : "transition-transform duration-300 group-hover:translate-x-[8%]"} style={{ width: k(36), height: k(24) }} viewBox="0 0 18 12" fill="none" aria-hidden><path d="M1 6H17M12 1l5 5-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </span>
+            </Link>
+          )
+        })}
       </div>
     </Shell>
   )

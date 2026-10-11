@@ -1,29 +1,25 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router"
 import Shell from "../kit/Shell"
+import { Star8 } from "../kit/Pieces"
 import { pillars } from "../kit/data"
 
 /**
- * Mobile-first sobre el lienzo de public/proyecto/bg.webp (808×1748, sin texto).
- * Coordenadas del diseño original (PDF pág. 2, 850×1512): X(x)=x-22, Y(y)=y+TOP
- * (TOP px de papel arriba para que el navbar quede sobre papel, como en Inicio;
- * BOTTOM px de papel abajo). --k = px del lienzo → px de pantalla.
+ * Diseño nuevo (PDF "Pagina Web - Diseño", pág. 2, 1179×2556). El fondo (public/proyecto/bg.webp) es el render
+ * SIN texto: miniaturas con marco, línea de tiempo, reglas, flores y disco quedan en la imagen; el papel es de
+ * color plano #efe8df (se rellenó con ese color). Todo el texto, la estrella, el botón y los "+" son HTML en
+ * unidades del lienzo (--k = ancho_css / 1179). Barra transparente; el lienzo cubre el alto.
  */
-const TOP = 112, BOTTOM = 124
-const W = 808, H = 1512 + TOP + BOTTOM
+const W = 1179, H = 2556
 const k = (n: number) => `calc(var(--k) * ${n})`
-const X = (x: number) => k(x - 22)
-const Y = (y: number) => k(y + TOP)
+const INK = "#3a1010"
+const LINE = "#461e1d"
+const bodoni = { fontFamily: "'Bodoni Moda', serif" } as const
+const bodoniIt = { fontFamily: "'Bodoni Static', 'Bodoni Moda', serif", fontStyle: "italic", fontWeight: 600 } as const
 
-const ink = "#1d1611"
-const lines = [
-  ["Más que un soporte, es un territorio", "para crear, guardar y sentir."],
-  ["La música como hilo que da vida", "a cada universo."],
-  ["Collage, fotografía y símbolos que", "construyen nuevas realidades."],
-  ["Texturas, recortes y elementos", "que hacen tangible la experiencia."],
-  ["Lo que cambia, se transforma y se", "habita en el tiempo."],
-  ["Un encuentro entre lo físico, lo digital", "y lo emocional."],
-]
+// Filas: top del círculo "+" (lienzo) y top de la tinta del título
+const ROW = [1392, 1559, 1726, 1894, 2064, 2229]
+const TITLE_DY = [2, -10, -6, -3, 0, 2]   // ajuste fino medido (el alto de las mayúsculas/ascendentes cambia por fila)
 
 export default function Proyecto() {
   const [open, setOpen] = useState<number | null>(null)
@@ -43,85 +39,87 @@ export default function Proyecto() {
   }, [open])
 
   return (
-    <Shell bar={false} className="-mt-11">
-      <div className="min-h-dvh" style={{ background: "#f0d9bf" }}>
-        <div
-          className="relative mx-auto [--k:calc(var(--w)/808)] [--w:min(100vw,480px)]"
-          style={{ width: "var(--w)", aspectRatio: `${W} / ${H}`, color: ink }}
+    <Shell bar={false} label="" className="-mt-11 min-h-dvh overflow-x-clip">
+      <div
+        className="relative left-1/2 w-[var(--w)] -translate-x-1/2 [--k:calc(var(--w)/1179)] [--w:max(min(100vw,480px),calc(100dvh*1179/2556))]"
+        style={{ aspectRatio: `${W} / ${H}`, color: INK }}
+      >
+        <img src="/proyecto/bg.webp?v=5" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
+
+        <p data-m="hdr" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ ...bodoni, top: k(62), fontSize: k(62), lineHeight: k(70), fontWeight: 600, color: "#11110f", transform: "scaleX(.912)" }}>
+          Habitar la música
+        </p>
+        <p data-m="kick" className="absolute whitespace-nowrap" style={{ ...bodoni, left: k(80), top: k(156), fontSize: k(41), lineHeight: k(52), fontWeight: 600, color: "#11110f", transform: "scaleX(.94)", transformOrigin: "left" }}>
+          01 / Proyecto
+        </p>
+
+        <h1 data-m="h1" className="absolute whitespace-nowrap font-normal" style={{ ...bodoniIt, left: k(82), top: k(281), fontSize: k(103), lineHeight: k(92), color: "#631413", transform: "scaleX(.874)", transformOrigin: "left" }}>
+          La música<br />también se puede<br />habitar.
+        </h1>
+
+        <p data-m="para" className="absolute whitespace-nowrap" style={{ left: k(82), top: k(618), color: "#11110f", fontFamily: "Montserrat, sans-serif", fontStyle: "italic", fontWeight: 600, fontSize: k(36), lineHeight: k(35) }}>
+          Cada fanzine construye un universo<br />a través de imágenes, palabras,<br />materia y memoria. El papel es el<br />punto de partida. La experiencia<br />continúa cuando lo físico y lo<br />digital se encuentran.
+        </p>
+
+        <Star8 className="absolute" style={{ left: k(401), top: k(886), width: k(59), height: k(59) }} />
+
+        <Link
+          to="/universos"
+          data-m="btn"
+          className="absolute flex items-center justify-center whitespace-nowrap"
+          style={{ ...bodoni, left: k(87), top: k(976), width: k(700), height: k(120), padding: `0 ${k(56)}`, borderRadius: k(60), border: `${k(1.2)} solid ${LINE}`, color: INK, gap: k(30), fontWeight: 500, fontSize: k(56) }}
         >
-          <img src="/proyecto/bg.webp?v=4" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
+          Conoce el proyecto
+          <svg viewBox="0 0 54 36" style={{ width: k(58), height: k(39) }} fill="none" aria-hidden><path d="M1 18H52M36 3l16 15-16 15" stroke="currentColor" strokeWidth="3.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </Link>
 
-          <p className="f-mont absolute whitespace-nowrap" style={{ left: X(72), top: Y(-4), fontSize: k(17), lineHeight: k(18), letterSpacing: ".22em", fontWeight: 500, color: "#3b2d20" }}>
-            01 / EL PROYECTO
-          </p>
-
-          <h1 className="f-bodoni absolute whitespace-nowrap [--tx:.81]" style={{ left: X(72), top: Y(52), fontSize: k(80), lineHeight: k(72), fontWeight: 600, letterSpacing: "-.035em", transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
-            La música<br />también se puede<br />habitar<span style={{ color: "#8a1620" }}>.</span>
-          </h1>
-
-          <p className="absolute whitespace-nowrap" style={{ left: X(74), top: Y(298), fontFamily: "'Libre Caslon Text', serif", fontSize: k(25.5), lineHeight: k(32) }}>
-            Cada fanzine construye un universo<br />a través de imágenes, palabras,<br />materia y memoria. El papel es el<br />punto de partida. La experiencia<br />continúa cuando lo físico y lo<br />digital se encuentran.
-          </p>
-
-          <Link
-            to="/universos"
-            className="f-mont absolute flex items-center justify-center rounded-full border-[1.3px] border-[#1d1611] transition hover:bg-[#1d1611] hover:text-[#f3e9da]"
-            style={{ left: X(67), top: Y(587), width: k(369), height: k(76), gap: k(24), fontSize: k(17.5), letterSpacing: ".15em", fontWeight: 500 }}
-          >
-            CONOCE EL PROYECTO
-            <svg style={{ width: k(30), height: k(20) }} viewBox="0 0 18 12" fill="none" aria-hidden><path d="M1 6H17M12 1l5 5-5 5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </Link>
-
-          {pillars.map((p, i) => {
-            const on = open === i
-            return (
-              <div key={p.title} data-pillar className="absolute" style={{ left: X(150), top: Y(838 + 115 * i), width: k(630), height: k(108), zIndex: on ? 20 : 1 }}>
-                <button
-                  type="button"
-                  aria-expanded={on}
-                  aria-controls={`pillar-${i}`}
-                  aria-label={`${p.title}: ${on ? "cerrar" : "ver descripción"}`}
-                  onClick={() => setOpen(on ? null : i)}
-                  className="group absolute inset-0 block text-left transition-transform duration-150 active:scale-[.985]"
+        {pillars.map((p, i) => {
+          const on = open === i
+          const name = p.title[0] + p.title.slice(1).toLowerCase()
+          return (
+            <div key={p.title} data-pillar className="absolute" style={{ left: k(250), top: k(ROW[i] - 22), width: k(800), height: k(122), zIndex: on ? 20 : 1 }}>
+              <button
+                type="button"
+                aria-expanded={on}
+                aria-controls={`pillar-${i}`}
+                aria-label={`${name}: ${on ? "cerrar" : "ver descripción"}`}
+                onClick={() => setOpen(on ? null : i)}
+                className="absolute inset-0 block text-left transition-transform duration-150 active:scale-[.985]"
+              >
+                <span data-m={`row${i}`} className="absolute whitespace-nowrap" style={{ ...bodoniIt, left: k(248), top: k(22 + TITLE_DY[i]), fontSize: k(46.5), lineHeight: k(56), color: INK, transform: "scaleX(.975)", transformOrigin: "left" }}>
+                  {name}
+                </span>
+                <span
+                  className="absolute flex items-center justify-center rounded-full transition-transform duration-300 ease-out"
+                  style={{ left: k(696), top: k(22), width: k(78), height: k(78), border: `${k(1.2)} solid ${LINE}`, transform: on ? "rotate(45deg)" : undefined, color: on ? "#8a1620" : INK, borderColor: on ? "#8a1620" : LINE }}
                 >
-                  <span className="f-mont absolute whitespace-nowrap" style={{ left: k(201), top: k(24), fontSize: k(20), lineHeight: k(22), fontWeight: 600, letterSpacing: ".13em" }}>
-                    {p.title}
-                  </span>
-                  <span className="absolute whitespace-nowrap" style={{ left: k(201), top: k(54), fontFamily: "'Libre Caslon Text', serif", fontSize: k(16.5), lineHeight: k(22), color: "#4a3a28" }}>
-                    {lines[i][0]}<br />{lines[i][1]}
-                  </span>
-                  <span
-                    className={`absolute flex items-center justify-center rounded-full border-[1.3px] transition-all duration-300 ease-out group-hover:bg-[#1d1611] group-hover:text-[#f3e9da] ${on ? "rotate-45 border-[#8a1620] bg-[#8a1620] text-[#f3e9da]" : "border-[#1d1611]"}`}
-                    style={{ left: k(563), top: k(27), width: k(52), height: k(52) }}
-                  >
-                    <svg style={{ width: k(22), height: k(22) }} viewBox="0 0 22 22" fill="none" aria-hidden>
-                      <path d="M11 2v18M2 11h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                  </span>
-                </button>
+                  <svg style={{ width: k(44), height: k(44) }} viewBox="0 0 22 22" fill="none" aria-hidden>
+                    <path d="M11 1v20M1 11h20" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+                  </svg>
+                </span>
+              </button>
 
-                {on && (
-                  <div
-                    id={`pillar-${i}`}
-                    role="dialog"
-                    aria-label={p.title}
-                    className="pillar-pop absolute"
-                    style={{
-                      left: k(183), top: k(-12), width: k(372), padding: `${k(14)} ${k(18)} ${k(16)}`,
-                      background: "linear-gradient(160deg,#f7ecd9,#efdcc0)",
-                      border: "1px solid rgba(70,48,30,.35)",
-                      boxShadow: "0 10px 26px rgba(40,22,8,.32), 0 1px 0 rgba(255,255,255,.5) inset",
-                      borderRadius: k(4),
-                    }}
-                  >
-                    <span className="f-mont block" style={{ fontSize: k(15), fontWeight: 600, letterSpacing: ".18em", color: "#8a1620" }}>{p.title}</span>
-                    <span className="mt-[.35em] block" style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: k(20), lineHeight: k(27), color: "#2b1b0e" }}>{p.text}</span>
-                  </div>
-                )}
-              </div>
-            )
-          })}
-        </div>
+              {on && (
+                <div
+                  id={`pillar-${i}`}
+                  role="dialog"
+                  aria-label={name}
+                  className="pillar-pop absolute"
+                  style={{
+                    left: k(236), top: k(-14), width: k(450), padding: `${k(20)} ${k(26)} ${k(24)}`,
+                    background: "linear-gradient(160deg,#f7ecd9,#efdcc0)",
+                    border: "1px solid rgba(70,48,30,.35)",
+                    boxShadow: "0 10px 26px rgba(40,22,8,.32), 0 1px 0 rgba(255,255,255,.5) inset",
+                    borderRadius: k(6),
+                  }}
+                >
+                  <span className="f-mont block" style={{ fontSize: k(22), fontWeight: 600, letterSpacing: ".18em", color: "#8a1620" }}>{p.title}</span>
+                  <span className="mt-[.35em] block" style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: k(31), lineHeight: k(41), color: "#2b1b0e" }}>{p.text}</span>
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
     </Shell>
   )

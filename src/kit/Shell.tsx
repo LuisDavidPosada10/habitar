@@ -52,11 +52,11 @@ export function MenuProvider({ children }: { children: ReactNode }) {
     <Ctx.Provider value={openMenu}>
       {children}
       {open && (
-        <div className={`menu-scrim ${closing ? "menu-out" : ""} fixed inset-0 z-50 flex flex-col items-center justify-center gap-5 bg-[#1d1611]/96 text-[#f3e9da]`} role="dialog" aria-label="Menú">
+        <div className={`menu-scrim ${closing ? "menu-out" : ""} fixed inset-0 z-50 flex flex-col items-center justify-center gap-5 bg-black/96 text-[#f3e9da]`} role="dialog" aria-label="Menú">
           <button type="button" aria-label="Cerrar menú" onClick={close} className="menu-item absolute right-5 top-4 text-4xl leading-none" style={{ "--i": 0 } as CSSProperties}>×</button>
           <p className="menu-item mb-3 text-xs tracking-[.3em]" style={{ fontFamily: "Montserrat, sans-serif", "--i": 0 } as CSSProperties}>HABITAR LA MÚSICA</p>
           {menuItems.map((m, i) => (
-            <Link key={m.to} to={m.to} onClick={close} className="menu-item text-[clamp(1.6rem,4vw,2.4rem)]" style={{ fontFamily: "'Bodoni Moda', serif", color: pathname === m.to ? "#e0525b" : undefined, "--i": i + 1 } as CSSProperties}>
+            <Link key={m.to} to={m.to} onClick={close} className="menu-item text-[clamp(1.6rem,4vw,2.4rem)]" style={{ fontFamily: "'Bodoni Moda', serif", color: pathname === m.to ? "#631413" : undefined, "--i": i + 1 } as CSSProperties}>
               {m.label}
               {m.to === "/experiencia" && journey.all && !journey.sent && (
                 <span aria-label="Disponible: ya recorriste los tres universos" className="ml-3 inline-block size-2.5 -translate-y-1 rounded-full bg-[#e0525b]" />

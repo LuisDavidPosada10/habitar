@@ -196,3 +196,12 @@ export function Scribbles({ className = "", lines = 7 }: { className?: string; l
     </div>
   )
 }
+
+/** Estrella de 8 puntas del diseño nuevo (burdeos), a `size` px de lienzo/pantalla. */
+export function Star8({ className = "", style }: { className?: string; style?: React.CSSProperties }) {
+  return (
+    <svg aria-hidden className={className} style={style} viewBox="-10 -10 20 20" fill="#3a1010">
+      <path d="M0.00 -10.00 L1.26 -3.05 L5.94 -5.94 L3.05 -1.26 L10.00 0.00 L3.05 1.26 L5.94 5.94 L1.26 3.05 L0.00 10.00 L-1.26 3.05 L-5.94 5.94 L-3.05 1.26 L-10.00 0.00 L-3.05 -1.26 L-5.94 -5.94 L-1.26 -3.05Z" />
+    </svg>
+  )
+}

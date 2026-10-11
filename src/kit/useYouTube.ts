@@ -6,7 +6,7 @@ type YTApi = { Player: new (el: HTMLElement, o: unknown) => YTPlayer }
 declare global { interface Window { YT?: YTApi; onYouTubeIframeAPIReady?: () => void } }
 
 let apiPromise: Promise<YTApi> | null = null
-const loadApi = () => (apiPromise ??= new Promise<YTApi>((res) => {
+export const loadApi = () => (apiPromise ??= new Promise<YTApi>((res) => {
   if (window.YT?.Player) return res(window.YT)
   const prev = window.onYouTubeIframeAPIReady
   window.onYouTubeIframeAPIReady = () => { prev?.(); res(window.YT!) }

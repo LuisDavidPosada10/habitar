@@ -54,7 +54,7 @@ export default function SilvanaCorriente() {
           className="absolute"
           style={{ left: k(MB.x), top: k(MB.y), width: k(MB.w), height: k(MB.h) }}
         />
-        <p aria-live="polite" className="pointer-events-none absolute inset-x-0 whitespace-nowrap text-center" style={{ fontFamily: "Montserrat, sans-serif", top: k(MB.y + MB.h - 30), fontSize: k(27), letterSpacing: ".2em", fontWeight: 500, color: "#26381f" }}>
+        <p aria-live="polite" className="pointer-events-none absolute inset-x-0 whitespace-nowrap text-center" style={{ fontFamily: "Montserrat, sans-serif", top: k(MB.y + MB.h - 14), fontSize: k(27), letterSpacing: ".2em", fontWeight: 500, color: "#26381f" }}>
           {audio.playing ? "SUENA · TOCA PARA PAUSAR" : "TOCA LA MARIPOSA"}
         </p>
 

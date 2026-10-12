@@ -65,10 +65,9 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 11px;
 .ficha-swap { animation: ficha-swap .32s cubic-bezier(.2,.8,.3,1) both; }
 @media (prefers-reduced-motion: reduce) { .ficha-scrim, .ficha-panel, .ficha-swap { animation: none; } }
 
-/* Caja musical (kit/MusicBox.tsx, /silvana-3): la mariposa vibra, aletea y dibuja ondas que se expanden */
+/* Caja musical (kit/MusicBox.tsx, /silvana-3): la mariposa vibra y dibuja ondas que se expanden */
 @keyframes mb-bob { 0%, 100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-14px) rotate(1.5deg); } }
 @keyframes mb-vibe { 0%, 100% { transform: translate(0,0) rotate(0); } 12% { transform: translate(-7px,2px) rotate(-3.2deg); } 28% { transform: translate(8px,-2px) rotate(3deg); } 44% { transform: translate(-6px,2px) rotate(-2.4deg); } 60% { transform: translate(5px,-1px) rotate(2deg); } 78% { transform: translate(-3px,1px) rotate(-1deg); } }
-@keyframes mb-flap { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(.7); } }
 @keyframes mb-wave {
   0% { opacity: 0; transform: scale(.5) rotate(0deg); stroke-dashoffset: 1; }
   14% { opacity: .95; }
@@ -77,13 +76,10 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 11px;
 }
 .mb-fly { transform-box: fill-box; transform-origin: 50% 55%; animation: mb-bob 4s ease-in-out infinite; }
 .mb-fly.mb-vibe { animation: mb-vibe .5s linear 1; }
-.mb-wings { transform-box: fill-box; transform-origin: 50% 50%; animation: mb-flap 2.6s ease-in-out infinite; }
-.mb-fly.mb-vibe .mb-wings { animation: mb-flap .13s ease-in-out 4; }
-.mb-fly.mb-on .mb-wings { animation-duration: 1.5s; }
 .mb-ring { transform-box: fill-box; transform-origin: 50% 50%; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; fill: none; stroke-linecap: round; animation: mb-wave 2.6s ease-out 1 both; }
 .mb-loop .mb-ring { animation-iteration-count: infinite; }
 @media (prefers-reduced-motion: reduce) {
-  .mb-fly, .mb-fly.mb-vibe, .mb-wings, .mb-fly.mb-vibe .mb-wings { animation: none; }
+  .mb-fly, .mb-fly.mb-vibe { animation: none; }
   .mb-ring { animation: none; opacity: .55; stroke-dashoffset: 0; }
   .mb-ring.mb-r2, .mb-ring.mb-r3 { opacity: .3; transform: scale(1.35); }
 }

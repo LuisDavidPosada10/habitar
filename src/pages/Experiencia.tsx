@@ -4,17 +4,17 @@ import Shell from "../kit/Shell"
 import { submitExperience } from "../kit/experience"
 
 /**
- * /experiencia · Dejar tu experiencia. Lienzo = public/experiencia/bg.webp (899×1637, sin textos, sin placeholder/contador de la tarjeta ni botón).
- * Origen: PDF índice 18 (899×1600); filas 82–1600 (la barra negra es la real del Shell), estirado sólo en el papel entre la tarjeta y el collage inferior
- * (tools/stretch_experiencia.py; el resto es collage denso: en pantallas largas el lienzo se agranda y recorta un poco los lados).
- * Coordenadas: x = x del PDF; y = y NUEVA (y_pdf − 82 hasta la tarjeta). Fotos, películas, flores, luna, estrellas y la nota "Gracias por habitar…" quedan en la imagen.
- * La tarjeta de papel del textarea está en la imagen; el textarea (300 caracteres) y el botón son HTML.
- * El envío va por kit/experience.ts (endpoint configurable con VITE_EXPERIENCE_URL).
+ * /experiencia · Dejar tu experiencia. Diseño nuevo (PDF "Pagina Web - final", pág. 4, 1179×2556). Fondo = public/experiencia/bg.webp: render
+ * SIN texto (luna, hibisco, recuadro redondeado de la pregunta con su estrella, tarjeta de papel rasgado con su marco redondeado y flor,
+ * collage de abajo: películas, disco, paloma, notas). Textos, textarea (300 caracteres), botón "Enviar respuesta" y flecha de volver son
+ * HTML en unidades del lienzo (--k = ancho_css / 1179). El envío va por kit/experience.ts (Formspree / endpoint configurable).
  */
-const W = 899, H = 1637
+const W = 1179, H = 2556
 const k = (n: number) => `calc(var(--k) * ${n})`
-const ink = "#1d1611"
-const red = "#b3141c"
+const bodoni = { fontFamily: "'Bodoni Moda', serif" } as const
+const bodoniIt = { fontFamily: "'Bodoni Static', 'Bodoni Moda', serif", fontStyle: "italic" } as const
+const mont = { fontFamily: "Montserrat, sans-serif", fontStyle: "italic", fontWeight: 600, color: "#11110f" } as const
+const RED = "#631413"
 const MAX = 300
 
 type Status = "idle" | "sending" | "sent" | "error"
@@ -22,7 +22,6 @@ type Status = "idle" | "sending" | "sent" | "error"
 export default function Experiencia() {
   const [text, setText] = useState("")
   const [status, setStatus] = useState<Status>("idle")
-  const [focus, setFocus] = useState(false)
   const [hp, setHp] = useState("")   // campo trampa anti-spam: las personas no lo ven ni lo llenan; los bots sí
   const busy = status === "sending" || status === "sent"
 
@@ -34,70 +33,55 @@ export default function Experiencia() {
   }
 
   return (
-    <Shell theme="home">
-      <div className="min-h-[calc(100dvh-44px)] overflow-x-clip" style={{ background: "#ead2b8" }}>
-        <form
-          onSubmit={send}
-          className="relative left-1/2 -translate-x-1/2 [--k:calc(var(--w)/899)] [--w:max(min(100vw,480px),calc((100dvh-44px)*899/1637))]"
-          style={{ width: "var(--w)", aspectRatio: `${W} / ${H}`, color: ink }}
+    <Shell theme="home" bar={false} label="" className="-mt-11 min-h-dvh overflow-x-clip">
+      <form
+        onSubmit={send}
+        className="relative left-1/2 w-[var(--w)] -translate-x-1/2 [--k:calc(var(--w)/1179)] [--w:max(min(100vw,480px),calc(100dvh*1179/2556))]"
+        style={{ aspectRatio: `${W} / ${H}`, color: "#11110f" }}
+      >
+        <img src="/experiencia/bg.webp?v=2" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
+
+        <p data-m="hdr" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ ...bodoni, top: k(74.5), fontSize: k(62), lineHeight: k(70), fontWeight: 600, transform: `translateX(${k(8.5)}) scaleX(.912)` }}>
+          Habitar la música
+        </p>
+
+        <BackChevron to="/universos" label="Volver a los universos" cx={121.5} cy={187} color="#3a1010" />
+
+        <h1 aria-label="Dejar tu experiencia" className="m-0 font-normal">
+          <span data-m="t1" aria-hidden className="absolute whitespace-nowrap" style={{ ...bodoniIt, left: k(254), top: k(374), fontSize: k(150), lineHeight: k(150), fontWeight: 600, color: RED, transform: "scaleX(1.07)", transformOrigin: "left" }}>Dejar tu</span>
+          <span data-m="t2" aria-hidden className="absolute whitespace-nowrap" style={{ ...bodoniIt, left: k(136), top: k(541.5), fontSize: k(143), lineHeight: k(143), fontWeight: 600, color: "#000", transform: "scaleX(1.085)", transformOrigin: "left" }}>experiencia</span>
+        </h1>
+
+        <p data-m="prompt" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ ...mont, top: k(786), fontSize: k(36), lineHeight: k(43) }}>
+          Después de recorrer estos<br />universos, ¿qué imagen, sonido<br />o historia se quedó contigo?
+        </p>
+
+        <input type="text" name="website" value={hp} onChange={(e) => setHp(e.target.value)} tabIndex={-1} autoComplete="off" aria-hidden className="absolute -left-[9999px] size-px opacity-0" />
+        <label htmlFor="exp" className="sr-only">Tu experiencia</label>
+        <textarea
+          id="exp" data-m="area" value={text} maxLength={MAX} disabled={busy} placeholder="Escribe aquí..."
+          onChange={(e) => { setText(e.target.value); if (status === "error") setStatus("idle") }}
+          className="absolute resize-none border-0 bg-transparent outline-none placeholder:text-[#11110f] disabled:opacity-80"
+          style={{ ...mont, left: k(170), top: k(1188), width: k(870), height: k(240), padding: `0 ${k(18)}`, outline: "none", fontSize: k(30), lineHeight: k(40), caretColor: RED }}
+        />
+        <p aria-hidden className="absolute whitespace-nowrap tabular-nums" style={{ ...mont, fontWeight: 500, left: k(190), top: k(1425), fontSize: k(24), lineHeight: k(30), color: "#6d5f52" }}>
+          {text.length}/{MAX}
+        </p>
+
+        <button
+          type="submit" data-m="send" disabled={!text.trim() || busy}
+          className="group absolute flex items-center justify-center rounded-full outline-none transition focus-visible:ring-2 focus-visible:ring-[#631413] focus-visible:ring-offset-2 enabled:hover:brightness-125 enabled:active:scale-[.985] disabled:cursor-default"
+          style={{ left: k(257), top: k(1605), width: k(670), height: k(119), border: `${k(1.3)} solid ${RED}`, color: RED, opacity: !text.trim() && status !== "sent" ? 0.62 : 1 }}
         >
-          <img src="/experiencia/bg.webp?v=1" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
+          <span data-m="sendtxt" className="whitespace-nowrap" style={{ ...bodoniIt, fontSize: k(status === "sent" ? 60 : 70), lineHeight: k(88), fontWeight: 600, transform: `translateY(${k(-6)}) scaleX(1.08)` }}>
+            {status === "sending" ? "Enviando..." : status === "sent" ? "Respuesta enviada" : "Enviar respuesta"}
+          </span>
+        </button>
 
-          <BackChevron to="/universos" label="Volver a los universos" cx={240} cy={124} color={ink} />
-          <p className="f-mont absolute whitespace-nowrap" style={{ left: k(269), top: k(107.5), fontSize: k(20), lineHeight: k(33), letterSpacing: ".13em", fontWeight: 400 }}>
-            06 /<br />DEJAR TU EXPERIENCIA
-          </p>
-          <span aria-hidden className="absolute" style={{ left: k(268), top: k(184), width: k(79), height: k(3), background: ink }} />
-
-          <h1 className="f-bodoni" aria-label="Dejar tu experiencia.">
-            <span aria-hidden className="absolute whitespace-nowrap [--tx:.82]" style={{ left: k(222), top: k(237), fontSize: k(112), lineHeight: k(112), fontWeight: 500, letterSpacing: "-.03em", transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
-              Dejar tu
-            </span>
-            <span aria-hidden className="absolute whitespace-nowrap [--tx:.784]" style={{ left: k(223), top: k(346), fontSize: k(112), lineHeight: k(112), fontWeight: 500, letterSpacing: "-.03em", transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
-              experiencia<span style={{ color: red }}>.</span>
-            </span>
-          </h1>
-
-          <p className="absolute whitespace-nowrap" style={{ left: k(232), top: k(490), fontFamily: "'Libre Caslon Text', serif", fontSize: k(31.5), lineHeight: k(37.5), color: "#2b1b0e", transform: "scaleX(.885)", transformOrigin: "left" }}>
-            Después de recorrer estos<br />universos, ¿qué imagen, sonido<br />o historia se quedó contigo?
-          </p>
-
-          <span aria-hidden className="pointer-events-none absolute transition-opacity duration-200" style={{ left: k(212), top: k(682), width: k(554), height: k(206), opacity: focus ? 1 : 0, boxShadow: "inset 0 0 0 2px rgba(179,20,28,.38)", borderRadius: k(4) }} />
-          <input type="text" name="website" value={hp} onChange={(e) => setHp(e.target.value)} tabIndex={-1} autoComplete="off" aria-hidden className="absolute -left-[9999px] size-px opacity-0" />
-          <label htmlFor="exp" className="sr-only">Tu experiencia</label>
-          <textarea
-            id="exp" value={text} maxLength={MAX} disabled={busy} placeholder="Escribe aquí..."
-            onChange={(e) => { setText(e.target.value); if (status === "error") setStatus("idle") }}
-            onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}
-            className="absolute resize-none border-0 bg-transparent outline-none placeholder:text-[#8f7e6c] disabled:opacity-80"
-            style={{ left: k(228), top: k(704), width: k(526), height: k(150), padding: `0 ${k(12)}`, outline: "none", fontFamily: "'Libre Caslon Text', serif", fontSize: k(27), lineHeight: k(36), color: "#2b1b0e", caretColor: red }}
-          />
-          <p aria-hidden className="f-mont absolute whitespace-nowrap text-right tabular-nums" style={{ left: k(641), top: k(846), width: k(80), fontSize: k(16.5), lineHeight: k(22), letterSpacing: ".04em", color: "#6d5f52" }}>
-            {text.length}/{MAX}
-          </p>
-
-          <button
-            type="submit" disabled={!text.trim() || busy}
-            className="group absolute flex items-center justify-between rounded-full outline-none transition focus-visible:ring-2 focus-visible:ring-[#b3141c] focus-visible:ring-offset-2 enabled:hover:brightness-125 enabled:active:scale-[.985] disabled:cursor-default"
-            style={{ left: k(232), top: k(990), width: k(498), height: k(82), padding: `0 ${k(56)}`, background: "#0b0b0b", color: "#f3e9da", opacity: !text.trim() && status !== "sent" ? 0.62 : 1, boxShadow: "0 6px 16px rgba(20,10,6,.25)" }}
-          >
-            <span className="f-mont whitespace-nowrap" style={{ fontSize: k(22), letterSpacing: ".107em", fontWeight: 400 }}>
-              {status === "sending" ? "ENVIANDO..." : status === "sent" ? "EXPERIENCIA ENVIADA" : "DEJAR MI EXPERIENCIA"}
-            </span>
-            {status === "sent" ? (
-              <svg style={{ width: k(30), height: k(22) }} viewBox="0 0 22 16" fill="none" aria-hidden><path d="M2 8.5l5.5 5.5L20 2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            ) : (
-              <svg className="transition-transform duration-300 group-enabled:group-hover:translate-x-1.5" style={{ width: k(30), height: k(20) }} viewBox="0 0 30 20" fill="none" aria-hidden>
-                <path d="M1 10h27M20 2l8 8-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            )}
-          </button>
-
-          <p role="status" aria-live="polite" className="f-mont absolute text-center" style={{ left: k(232), top: k(1086), width: k(498), fontSize: k(17), lineHeight: k(24), letterSpacing: ".06em", color: status === "error" ? red : "#4a3b2e" }}>
-            {status === "sent" ? "Gracias por habitar la música con nosotros." : status === "error" ? "No se pudo enviar. Inténtalo de nuevo." : ""}
-          </p>
-        </form>
-      </div>
+        <p role="status" aria-live="polite" className="absolute text-center" style={{ ...mont, fontWeight: 500, left: k(180), top: k(1752), width: k(820), fontSize: k(30), lineHeight: k(40), color: status === "error" ? "#b3141c" : "#3b2a24" }}>
+          {status === "sent" ? "Gracias por habitar la música con nosotros." : status === "error" ? "No se pudo enviar. Inténtalo de nuevo." : ""}
+        </p>
+      </form>
     </Shell>
   )
 }

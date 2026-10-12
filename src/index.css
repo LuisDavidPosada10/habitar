@@ -2,7 +2,7 @@
 @import "./fonts.css";
 @import "@fontsource/homemade-apple/latin-400.css";
 
-html, body, #root { margin: 0; min-height: 100%; background: #efe0c8; }
+html, body, #root { margin: 0; min-height: 100%; background: #efe8df; }
 body { font-family: 'EB Garamond', serif; -webkit-font-smoothing: antialiased; }
 button, a { -webkit-tap-highlight-color: transparent; cursor: pointer; }
 button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 2px solid #b3141c; outline-offset: 3px; }

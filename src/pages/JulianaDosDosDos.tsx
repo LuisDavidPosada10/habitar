@@ -150,7 +150,6 @@ function VersionModal({ i, go, onClose }: { i: number; go: (n: number) => void; 
             <YouTubeEmbed id={v.yt} title={v.key} />
           </div>
           <p className="mt-5" style={{ ...serifIt, fontWeight: 700, fontSize: 15, color: STEEL }}>{String(i + 1).padStart(2, "0")}</p>
-          <h2 style={{ ...serifIt, fontSize: "clamp(26px,8vw,34px)", lineHeight: 1.05, fontWeight: 700, color: NAVY }}>{v.key}</h2>
           <span aria-hidden className="mt-2 block h-[3px] w-14 rounded-full" style={{ background: STEEL }} />
         </div>
 

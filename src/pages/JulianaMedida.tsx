@@ -1,61 +1,59 @@
 import BackChevron from "../kit/BackChevron"
 import Shell from "../kit/Shell"
+import YouTubeEmbed from "../kit/YouTubeEmbed"
 
 /**
- * /juliana-1 · A la medida (2:20 A.M.). Lienzo = public/juliana1/bg.webp (942×1913, sin texto).
- * Origen: PDF índice 14, que sólo trae 381×668 px (¡mucho menos que las otras!, sin barra ni kicker): se amplió ×2.472 con
- * Lanczos + máscara de enfoque, se borró el título y el párrafo (tools/juliana1.json + tools/paper_fill.py: papel liso con grano)
- * y se estiró sólo en papel/marco (tools/stretch_juliana1.py). Coordenadas: x = x ampliada; y = y NUEVA.
- * Estrella, trazo azul, luna, papeles azules y película quedan en la imagen. El rectángulo gris del PDF (casi cuadrado, dejaba franjas negras enormes) se borró del fondo y el video va en una ventana 16:9 tipo foto pegada; iframe de YouTube que
- * arranca solo y en silencio (los navegadores sólo permiten autoplay mudo). Se añadió la flecha de volver (el diseño no la trae).
+ * /juliana-1 · A la medida (2:20 A.M). Diseño nuevo (PDF "Pagina Web - Diseño", pág. 15, 1179×2556). Fondo = public/juliana1/bg.webp: render
+ * SIN texto (nota de papel rasgado vacía, marco de foto, flores, collage), con el hueco del video (tablero de transparencia en el PDF)
+ * pintado de oscuro y el pétalo que lo tapa pegado encima. Textos y flecha de volver son HTML en unidades del lienzo (--k = ancho_css / 1179).
+ * El video (YouTube, autoplay en silencio) llena el hueco y se recorta alrededor del pétalo (clip-path): nada queda encima del iframe.
  */
-const W = 942, H = 1913
+const W = 1179, H = 2556
 const k = (n: number) => `calc(var(--k) * ${n})`
-const ink = "#0b1220"
+const bodoni = { fontFamily: "'Bodoni Moda', serif" } as const
+const bodoniIt = { fontFamily: "'Bodoni Static', 'Bodoni Moda', serif", fontStyle: "italic" } as const
+const mont = { fontFamily: "Montserrat, sans-serif", fontStyle: "italic", fontWeight: 500, color: "#11110f" } as const
 const YT = "lbiXQQyXC48" // Juliana – A la medida (2:20AM)
-const VID = { x: 115, y: 790, w: 712, h: 462 } // 16:9, centrado en el hueco de papel del marco
-const BORDER = 16
+const VID = { x: 126, y: 1021, w: 937, h: 603 }
+// Recorte (coordenadas 0–1 del rectángulo del video, regla par-impar): deja fuera el pétalo, pintado en el fondo.
+const CLIP = "M-0.0100 -0.0100 L1.0100 -0.0100 L1.0100 1.0100 L-0.0100 1.0100Z M0.0000 0.9250 L0.0000 0.9981 L0.0272 0.9981 L0.0260 0.9673 L0.0347 0.9596 L0.0347 0.9519 L0.0309 0.9462 L0.0248 0.9462 L0.0161 0.9288Z"
 
 export default function JulianaMedida() {
   return (
-    <Shell theme="juliana">
-      <div className="min-h-[calc(100dvh-44px)] overflow-x-clip" style={{ background: "#ead6bf" }}>
-        <div
-          className="relative left-1/2 -translate-x-1/2 [--k:calc(var(--w)/942)] [--w:max(min(100vw,480px),calc((100dvh-44px)*942/1913))]"
-          style={{ width: "var(--w)", aspectRatio: `${W} / ${H}`, color: ink }}
-        >
-          <img src="/juliana1/bg.webp?v=3" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
+    <Shell theme="juliana" bar={false} label="" className="-mt-11 min-h-dvh overflow-x-clip">
+      <div
+        className="relative left-[calc(50%-var(--w)/2)] w-[var(--w)] [--k:calc(var(--w)/1179)] [--w:max(min(100vw,480px),calc(100dvh*1179/2556))]"
+        style={{ aspectRatio: `${W} / ${H}`, color: "#11110f" }}
+      >
+        <img src="/juliana1/bg.webp?v=6" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
 
-          <BackChevron to="/juliana" label="Volver a Juliana" cx={80} cy={72} color={ink} />
+        <p data-m="hdr" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ ...bodoni, top: k(75), fontSize: k(62), lineHeight: k(70), fontWeight: 600, transform: `translateX(${k(1)}) scaleX(.912)` }}>
+          Habitar la música
+        </p>
 
-          <h1 className="f-bodoni absolute whitespace-nowrap [--tx:.645]" style={{ left: k(184), top: k(24), fontSize: k(138), lineHeight: k(122), fontWeight: 800, letterSpacing: "-.01em", transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
-            A LA<br />MEDIDA
-          </h1>
-          <p className="f-bodoni absolute whitespace-nowrap [--tx:.9]" style={{ left: k(196), top: k(268), fontSize: k(62), lineHeight: k(76), fontStyle: "italic", fontWeight: 400, transform: "scaleX(var(--tx))", transformOrigin: "left" }}>
-            (2:20 A.M.)
-          </p>
+        <BackChevron to="/juliana" label="Volver a Lo que florece" cx={113} cy={188.5} color="#3a1010" />
+        <p data-m="kick" className="absolute whitespace-nowrap" style={{ ...bodoniIt, left: k(148), top: k(166.5), fontSize: k(42), lineHeight: k(52), fontWeight: 600, color: "#000", transform: "scaleX(.935)", transformOrigin: "left" }}>
+          Lo que florece/ 01
+        </p>
 
-          {/* video 16:9 pegado como una foto (borde de papel, sombra y dos cintas); autoplay mudo */}
-          <div
-            className="absolute"
-            style={{ left: k(VID.x - BORDER), top: k(VID.y - BORDER), width: k(VID.w + BORDER * 2), height: k(VID.h + BORDER * 2), background: "#f7eedc", padding: k(BORDER), transform: "rotate(-.8deg)", boxShadow: "0 10px 28px rgba(20,16,10,.42), 0 1px 0 rgba(255,255,255,.6) inset", border: "1px solid rgba(70,52,34,.25)" }}
-          >
-            <span aria-hidden className="absolute" style={{ left: k(-34), top: k(-14), width: k(150), height: k(40), background: "rgba(206,186,150,.82)", transform: "rotate(-24deg)", boxShadow: "0 1px 3px rgba(40,28,14,.25)" }} />
-            <span aria-hidden className="absolute" style={{ right: k(-40), bottom: k(-12), width: k(150), height: k(40), background: "rgba(206,186,150,.82)", transform: "rotate(-24deg)", boxShadow: "0 1px 3px rgba(40,28,14,.25)" }} />
-            <div className="relative size-full overflow-hidden" style={{ background: "#000" }}>
-              <iframe
-                title="A la medida (2:20 A.M.) · Juliana Velásquez"
-                src={`https://www.youtube.com/embed/${YT}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`}
-                allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowFullScreen
-                className="absolute inset-0 size-full border-0"
-              />
-            </div>
-          </div>
+        <h1 data-m="title" className="absolute whitespace-nowrap font-normal" style={{ ...bodoniIt, left: k(90), top: k(285), fontSize: k(136), lineHeight: k(136), fontWeight: 700, color: "#1a175e", transform: "scaleX(1.055)", transformOrigin: "left" }}>
+          2:20 A.M:
+        </h1>
 
-          <p className="absolute whitespace-nowrap" style={{ left: k(217), top: k(1352), fontFamily: "'Libre Caslon Text', serif", fontSize: k(37.7), lineHeight: k(47), color: ink }}>
-            Son las 2:20 a.m. y la ciudad se<br />siente distinta. En este espacio,<br />Juliana nos invita a descubrir<br />cómo la música también habita<br />sus noches, sus ideas y sus<br />versiones más íntimas.
-          </p>
+        <p data-m="nota" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ ...bodoniIt, top: k(664), fontSize: k(47.5), lineHeight: k(48), fontWeight: 400, color: "#457089", transform: `translateX(${k(-18.5)}) scaleX(.953)` }}>
+          ¿Qué comienza a contarse cuando<br />todo está en silencio?
+        </p>
+
+        <svg width="0" height="0" className="absolute" aria-hidden focusable="false"><defs><clipPath id="juliana1-video-clip" clipPathUnits="objectBoundingBox"><path clipRule="evenodd" d={CLIP} /></clipPath></defs></svg>
+
+        {/* video: YouTube llenando el hueco de la foto pegada */}
+        <div className="absolute overflow-hidden" style={{ left: k(VID.x), top: k(VID.y), width: k(VID.w), height: k(VID.h), background: "#18181c", clipPath: "url(#juliana1-video-clip)" }}>
+          <YouTubeEmbed id={YT} title="A la medida (2:20 A.M) · Juliana Velásquez" />
         </div>
+
+        <p data-m="para" className="absolute whitespace-nowrap" style={{ ...mont, left: k(299), top: k(1813.5), fontSize: k(35.6), lineHeight: k(35) }}>
+          Son las 2:20 a.m. y la ciudad se<br />siente distinta. En este espacio,<br />Juliana nos invita a descubrir<br />cómo la música también habita<br />sus noches, sus ideas y sus<br />versiones más íntimas.
+        </p>
       </div>
     </Shell>
   )

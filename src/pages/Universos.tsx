@@ -20,8 +20,8 @@ const mont = { fontFamily: "Montserrat, sans-serif", fontStyle: "italic", fontWe
 const LT = 940                       // top (lienzo) del enlace de cada columna
 const cols = [
   { key: "mon", cx: 229, name: "Mon Laferte", tag: "Lo que arde", color: "#631413" },
-  { key: "silvana", cx: 589.5, name: "Silvana Estrada", tag: "Lo que florece", color: "#5d6a50" },
-  { key: "juliana", cx: 950, name: "Juliana", tag: "Lo que permanece", color: "#001e55" },
+  { key: "silvana", cx: 589.5, name: "Silvana Estrada", tag: "Lo que permanece", color: "#5d6a50" },
+  { key: "juliana", cx: 950, name: "Juliana", tag: "Lo que florece", color: "#001e55" },
 ] as const
 
 export default function Universos() {

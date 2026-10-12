@@ -24,7 +24,7 @@ export default function MonNoCaber() {
         className="relative left-[calc(50%-var(--w)/2)] w-[var(--w)] [--k:calc(var(--w)/1179)] [--w:max(min(100vw,480px),calc(100dvh*1179/2556))]"
         style={{ aspectRatio: `${W} / ${H}`, color: "#11110f" }}
       >
-        <img src="/mon1/bg.webp?v=4" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
+        <img src="/mon1/bg.webp?v=4b" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
 
         <p data-m="hdr" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ ...bodoni, top: k(59), fontSize: k(62), lineHeight: k(70), fontWeight: 600, transform: "scaleX(.912)" }}>
           Habitar la música

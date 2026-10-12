@@ -65,16 +65,28 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 11px;
 .ficha-swap { animation: ficha-swap .32s cubic-bezier(.2,.8,.3,1) both; }
 @media (prefers-reduced-motion: reduce) { .ficha-scrim, .ficha-panel, .ficha-swap { animation: none; } }
 
-/* Silvana-3: pista "toca y descubre" (las ondas del agua son un canvas, ver kit/WaterPond.tsx) */
-@keyframes touch-tap { 0%, 55%, 100% { transform: translateY(0) scale(1); } 22% { transform: translateY(5%) scale(.97); } }
-@keyframes touch-arc { 0%, 100% { opacity: .55; transform: scale(1); } 35% { opacity: 1; transform: scale(1.07); } }
-@keyframes touch-dot { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
-.touch-hand { animation: touch-tap 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
-.touch-arc { transform-box: fill-box; transform-origin: 50% 100%; animation: touch-arc 2.6s ease-out infinite; }
-.touch-arc-2 { animation-delay: .12s; }
-.touch-arc-1 { animation-delay: .32s; }
-.touch-dot { animation: touch-dot 2.6s ease-in-out infinite; }
-@media (prefers-reduced-motion: reduce) { .touch-hand, .touch-arc, .touch-dot { animation: none; opacity: 1; } }
+/* Caja musical (kit/MusicBox.tsx, /silvana-3): la mariposa vibra, aletea y dibuja ondas que se expanden */
+@keyframes mb-bob { 0%, 100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-14px) rotate(1.5deg); } }
+@keyframes mb-vibe { 0%, 100% { transform: translate(0,0) rotate(0); } 12% { transform: translate(-7px,2px) rotate(-3.2deg); } 28% { transform: translate(8px,-2px) rotate(3deg); } 44% { transform: translate(-6px,2px) rotate(-2.4deg); } 60% { transform: translate(5px,-1px) rotate(2deg); } 78% { transform: translate(-3px,1px) rotate(-1deg); } }
+@keyframes mb-flap { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(.7); } }
+@keyframes mb-wave {
+  0% { opacity: 0; transform: scale(.5) rotate(0deg); stroke-dashoffset: 1; }
+  14% { opacity: .95; }
+  70% { stroke-dashoffset: 0; }
+  100% { opacity: 0; transform: scale(1.75) rotate(8deg); stroke-dashoffset: 0; }
+}
+.mb-fly { transform-box: fill-box; transform-origin: 50% 55%; animation: mb-bob 4s ease-in-out infinite; }
+.mb-fly.mb-vibe { animation: mb-vibe .5s linear 1; }
+.mb-wings { transform-box: fill-box; transform-origin: 50% 50%; animation: mb-flap 2.6s ease-in-out infinite; }
+.mb-fly.mb-vibe .mb-wings { animation: mb-flap .13s ease-in-out 4; }
+.mb-fly.mb-on .mb-wings { animation-duration: 1.5s; }
+.mb-ring { transform-box: fill-box; transform-origin: 50% 50%; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; fill: none; stroke-linecap: round; animation: mb-wave 2.6s ease-out 1 both; }
+.mb-loop .mb-ring { animation-iteration-count: infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .mb-fly, .mb-fly.mb-vibe, .mb-wings, .mb-fly.mb-vibe .mb-wings { animation: none; }
+  .mb-ring { animation: none; opacity: .55; stroke-dashoffset: 0; }
+  .mb-ring.mb-r2, .mb-ring.mb-r3 { opacity: .3; transform: scale(1.35); }
+}
 
 /* Entrada de página (kit/Shell.tsx): sutil y distinta según el nivel. `backwards` = al terminar no queda transform (los modales fixed siguen bien). */
 @keyframes pg-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }

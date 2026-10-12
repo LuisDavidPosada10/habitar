@@ -1,25 +1,23 @@
-import { useState } from "react"
 import BackChevron from "../kit/BackChevron"
-import PaperCurrent from "../kit/PaperCurrent"
+import MusicBox from "../kit/MusicBox"
 import Shell from "../kit/Shell"
 import { useYouTube } from "../kit/useYouTube"
 
 /**
  * /silvana-3 · La corriente. Diseño nuevo (PDF "Pagina Web - Diseño", pág. 12, 1179×2556). Fondo = public/silvana3/bg.webp: render SIN
  * texto (flores, banda verde, nota de papel con el sol, collage de abajo). El diseño dejó vacío el espacio del medio: ahí va una
- * "corriente" interactiva (kit/PaperCurrent.tsx: tiras de papel recortado que ondulan solas, se levantan y mandan una onda al
- * tocar). Misma función que el estanque anterior: el primer toque arranca con sonido el YouTube oculto (sólo audio).
+ * "caja musical" (kit/MusicBox.tsx): una mariposa de papel recortado que, al tocarla, vibra, dibuja ondas y arranca el sonido
+ * (YouTube oculto, sólo audio); al tocarla otra vez se pausa. Sin reproductor visible.
  * Textos y flecha de volver son HTML en unidades del lienzo (--k = ancho_css / 1179).
  */
 const W = 1179, H = 2556
 const k = (n: number) => `calc(var(--k) * ${n})`
 const bodoni = { fontFamily: "'Bodoni Moda', serif" } as const
 const bodoniIt = { fontFamily: "'Bodoni Static', 'Bodoni Moda', serif", fontStyle: "italic" } as const
-const YT = "OpI5H246ziw" // sonido de fondo: video de YouTube oculto (sólo audio), arranca con el primer toque en la corriente
-const POND = { x: 0, y: 930, w: 1000, h: 710 }   // ventana de la corriente (unidades del lienzo)
+const YT = "OpI5H246ziw" // sonido de fondo: video de YouTube oculto (sólo audio), arranca al tocar la mariposa
+const MB = { x: 190, y: 985, w: 800, h: 600 }   // ventana de la caja musical (unidades del lienzo; la mariposa queda en su centro)
 
 export default function SilvanaCorriente() {
-  const [touched, setTouched] = useState(false)
   const audio = useYouTube(YT)
 
   return (
@@ -48,27 +46,17 @@ export default function SilvanaCorriente() {
           ¿Qué pasa cuando algo<br />cambia de forma?
         </p>
 
-        {/* la corriente: interactiva (ondas y desvíos al tocar; el primer toque inicia el audio) */}
-        <PaperCurrent
-          label="Corriente de agua: toca para crear ondas y activar el sonido"
-          onFirstTouch={() => { setTouched(true); audio.play() }}
-          className="absolute outline-none"
-          style={{ left: k(POND.x), top: k(POND.y), width: k(POND.w), height: k(POND.h), WebkitTapHighlightColor: "transparent" }}
-        >
-          <span
-            aria-hidden
-            className="pointer-events-none absolute flex flex-col items-center transition-opacity duration-700"
-            style={{ left: k(430 - 150), top: k(92), width: k(300), opacity: touched ? 0 : 1, color: "#26381f" }}
-          >
-            <svg className="touch-hint" style={{ width: k(72), height: k(94) }} viewBox="0 0 64 84" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
-              <circle className="touch-dot" cx="32" cy="4" r="1.7" fill="currentColor" stroke="none" />
-              <path className="touch-arc touch-arc-1" d="M9.5 28A24 24 0 0 1 54.5 28" />
-              <path className="touch-arc touch-arc-2" d="M18 35.5A14.5 14.5 0 0 1 46 35.5" />
-              <path className="touch-hand" transform="translate(-1.6 0)" d="M28.4 57V38.2a3.5 3.5 0 0 1 7 0V48a3.1 3.1 0 0 1 5.9.1 3.1 3.1 0 0 1 5.5 1.2 3 3 0 0 1 5 2.6V60c0 7.6-4 13.2-11.2 13.2h-3.3c-5 0-8.3-2.4-10.6-6.2L20.2 58a3 3 0 0 1 5-3.4l3.2 3.6" />
-            </svg>
-            <span className="whitespace-nowrap" style={{ fontFamily: "Montserrat, sans-serif", marginTop: k(22), fontSize: k(27), letterSpacing: ".2em", paddingLeft: ".2em", fontWeight: 500 }}>TOCA Y DESCUBRE</span>
-          </span>
-        </PaperCurrent>
+        {/* caja musical: la mariposa de papel vibra, dibuja ondas y arranca el sonido (YouTube oculto, sólo audio) */}
+        <MusicBox
+          label={audio.playing ? "Pausar el sonido de la corriente" : "Tocar la mariposa para escuchar el sonido de la corriente"}
+          playing={audio.playing}
+          onToggle={audio.toggle}
+          className="absolute"
+          style={{ left: k(MB.x), top: k(MB.y), width: k(MB.w), height: k(MB.h) }}
+        />
+        <p aria-live="polite" className="pointer-events-none absolute inset-x-0 whitespace-nowrap text-center" style={{ fontFamily: "Montserrat, sans-serif", top: k(MB.y + MB.h - 30), fontSize: k(27), letterSpacing: ".2em", fontWeight: 500, color: "#26381f" }}>
+          {audio.playing ? "SUENA · TOCA PARA PAUSAR" : "TOCA LA MARIPOSA"}
+        </p>
 
         <p data-m="nota" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ ...bodoniIt, top: k(1774), fontSize: k(64), lineHeight: k(64), fontWeight: 400, color: "#7a8a63", transform: `translateX(${k(-21)}) scaleX(.916)` }}>
           A veces, lo que parece<br />un cambio, también<br />es un comienzo.

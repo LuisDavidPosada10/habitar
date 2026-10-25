@@ -4,7 +4,7 @@ import Shell from "../kit/Shell"
 import YouTubeEmbed from "../kit/YouTubeEmbed"
 
 /**
- * /juliana-3 · Dos dos dos. Diseño nuevo (PDF "Pagina Web - final", pág. 2, 1179×2556). Fondo = public/juliana3/bg.webp: render SIN texto
+ * /juliana-2 · Dos dos dos. Diseño nuevo (PDF "Pagina Web - final", pág. 2, 1179×2556). Fondo = public/juliana3/bg.webp: render SIN texto
  * (luna, flores, nota de papel rasgado vacía, las 3 miniaturas con su papel, serpiente/reloj de arena y flor de abajo; sin círculos de flecha).
  * Textos, círculos con flecha y flecha de volver son HTML en unidades del lienzo (--k = ancho_css / 1179).
  * Cada fila (miniatura + flecha) es un botón: al tocarlo la flecha avanza (como en los hubs) y se abre un modal con el video de esa versión.
@@ -62,7 +62,7 @@ export default function JulianaDosDosDos() {
 
         <BackChevron to="/juliana" label="Volver a Lo que florece" cx={115.5} cy={186.5} color="#3a1010" />
         <p data-m="kick" className="absolute whitespace-nowrap" style={{ ...bodoniIt, left: k(147), top: k(164), fontSize: k(42), lineHeight: k(52), fontWeight: 600, color: "#000", transform: "scaleX(.932)", transformOrigin: "left" }}>
-          Lo que florece/ 03
+          Lo que florece/ 02
         </p>
 
         <h1 aria-label="Dos dos dos" className="m-0 font-normal">
@@ -139,7 +139,7 @@ function VersionModal({ i, go, onClose }: { i: number; go: (n: number) => void; 
         style={{ background: "#efe8df", border: "1px solid rgba(26,23,94,.3)", borderRadius: 6, boxShadow: "0 24px 60px rgba(8,14,26,.6)", color: "#11110f" }}
       >
         <div className="flex items-center justify-between px-5 pt-4" style={{ ...serifIt, fontWeight: 600, fontSize: 17 }}>
-          <span>Lo que florece/ 03 · {String(i + 1).padStart(2, "0")} / 03</span>
+          <span>Lo que florece/ 02 · {String(i + 1).padStart(2, "0")} / 03</span>
           <button ref={closeBtn} type="button" aria-label="Cerrar video" onClick={onClose} className="-m-2 flex size-10 items-center justify-center rounded-full transition hover:bg-black/10 focus-visible:outline-2 focus-visible:outline-[#1a175e]">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>
           </button>

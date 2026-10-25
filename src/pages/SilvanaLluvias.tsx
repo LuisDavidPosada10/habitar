@@ -4,7 +4,7 @@ import Shell from "../kit/Shell"
 /**
  * /silvana-4 · Vendrán suaves lluvias. Diseño nuevo (PDF "Pagina Web - Diseño", pág. 13, 1179×2556). Fondo = public/silvana4/bg.webp: render
  * SIN texto (golondrinas, nota de papel rasgado, collage, dados, cámara, arco…). La píldora de Spotify de la imagen queda TAPADA por la
- * de HTML (mismo tamaño y color): es un enlace a la playlist. Textos y flecha de volver son HTML en unidades del lienzo
+ * de HTML (mismo tamaño y color): es un enlace al álbum de Spotify. Textos y flecha de volver son HTML en unidades del lienzo
  * (--k = ancho_css / 1179). Barra transparente; el lienzo cubre el alto.
  */
 const W = 1179, H = 2556
@@ -12,7 +12,7 @@ const k = (n: number) => `calc(var(--k) * ${n})`
 const bodoni = { fontFamily: "'Bodoni Moda', serif" } as const
 const bodoniIt = { fontFamily: "'Bodoni Static', 'Bodoni Moda', serif", fontStyle: "italic" } as const
 const mont = { fontFamily: "Montserrat, sans-serif", fontStyle: "italic", fontWeight: 600, color: "#11110f" } as const
-const PLAYLIST = "https://open.spotify.com/playlist/5nwGjVnJ3v38zcRJfoP4k5"
+const PLAYLIST = "https://open.spotify.com/album/4PXqCA2P1xLNjIbn2pOQMm"
 const PILL = { x: 166, y: 1307, w: 851, h: 188 }
 const SAGE = "#7a8a63"
 
@@ -44,9 +44,9 @@ export default function SilvanaLluvias() {
           ¿Qué permanece<br />cuando el tiempo pasa?
         </p>
 
-        {/* playlist de Spotify: tapa por completo la píldora del fondo */}
+        {/* enlace de Spotify: tapa por completo la píldora del fondo */}
         <a
-          href={PLAYLIST} target="_blank" rel="noopener noreferrer" aria-label="Escucha la playlist Vendrán suaves lluvias en Spotify (se abre en otra pestaña)"
+          href={PLAYLIST} target="_blank" rel="noopener noreferrer" aria-label="Escucha el álbum en Spotify (se abre en otra pestaña)"
           className="group absolute block rounded-full outline-none transition-[transform,filter] duration-200 hover:brightness-110 focus-visible:brightness-110 active:scale-[.985]"
           style={{ left: k(PILL.x), top: k(PILL.y), width: k(PILL.w), height: k(PILL.h), background: SAGE }}
         >

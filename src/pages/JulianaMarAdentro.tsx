@@ -3,7 +3,7 @@ import Shell from "../kit/Shell"
 import YouTubeEmbed from "../kit/YouTubeEmbed"
 
 /**
- * /juliana-4 · Mar adentro. Diseño nuevo (PDF "Pagina Web - final", pág. 3, 1179×2556). Fondo = public/juliana4/bg.webp: render SIN texto
+ * /juliana-3 · Mar adentro. Diseño nuevo (PDF "Pagina Web - final", pág. 3, 1179×2556). Fondo = public/juliana4/bg.webp: render SIN texto
  * (gaviota, marco de foto con cinta, hojas, faro, medusa, concha, coral y sello), con el hueco del video (tablero de transparencia en el PDF)
  * pintado de oscuro. Textos y flecha de volver son HTML en unidades del lienzo (--k = ancho_css / 1179). El video (YouTube, autoplay en
  * silencio) llena el hueco del marco.
@@ -32,7 +32,7 @@ export default function JulianaMarAdentro() {
 
         <BackChevron to="/juliana" label="Volver a Lo que florece" cx={110.5} cy={187} color="#3a1010" />
         <p data-m="kick" className="absolute whitespace-nowrap" style={{ ...bodoniIt, left: k(141), top: k(164), fontSize: k(42), lineHeight: k(52), fontWeight: 600, color: "#000", transform: "scaleX(.932)", transformOrigin: "left" }}>
-          Lo que florece/ 04
+          Lo que florece/ 03
         </p>
 
         <h1 aria-label="Mar adentro" className="m-0 font-normal">

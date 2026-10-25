@@ -37,10 +37,10 @@ export const universes: Record<"mon" | "silvana" | "juliana", Universe> = {
     key: "juliana", to: "/juliana", index: "03", name: "Juliana Velásquez", album: "ESCRIBIR PARA EXISTIR", artistLine: "Juliana Velásquez",
     lead: "Un universo construido desde la ciudad, la vulnerabilidad, el tiempo, la escena y la multiplicidad.",
     scenarios: [
-      { n: "01", title: "2:20 A.M.", to: "/juliana-1" },
-      { n: "02", title: "CÓSEME", to: "/juliana-2" },
-      { n: "03", title: "DOS DOS DOS", to: "/juliana-3" },
-      { n: "04", title: "MAR ADENTRO", to: "/juliana-4" },
+      { n: "01", title: "CÓSEME", to: "/juliana-1" },
+      { n: "02", title: "DOS DOS DOS", to: "/juliana-2" },
+      { n: "03", title: "MAR ADENTRO", to: "/juliana-3" },
+      { n: "04", title: "LA PISTA", to: "/juliana-4" },
     ],
   },
 }

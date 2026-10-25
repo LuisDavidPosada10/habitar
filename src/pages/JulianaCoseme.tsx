@@ -3,7 +3,7 @@ import Shell from "../kit/Shell"
 import { usePlayback } from "../kit/Players"
 
 /**
- * /juliana-2 · Cóseme. Diseño nuevo (PDF "Pagina Web - final", pág. 1, 1179×2556). Fondo = public/juliana2/bg.webp: render SIN texto,
+ * /juliana-1 · Cóseme. Diseño nuevo (PDF "Pagina Web - final", pág. 1, 1179×2556). Fondo = public/juliana2/bg.webp: render SIN texto,
  * SIN botón de play y SIN waveform (la tarjeta gris queda lisa; el recuadro redondeado del párrafo es del fondo). Textos, botón, barras
  * del waveform (65, medidas del diseño) y flecha de volver son HTML en unidades del lienzo (--k = ancho_css / 1179).
  * El audio es un archivo propio (public/media/coseme.mp3, <audio> real: play/pausa y buscar).
@@ -39,7 +39,7 @@ export default function JulianaCoseme() {
 
         <BackChevron to="/juliana" label="Volver a Lo que florece" cx={112.5} cy={186.5} color="#3a1010" />
         <p data-m="kick" className="absolute whitespace-nowrap" style={{ ...bodoniIt, left: k(150), top: k(164), fontSize: k(42), lineHeight: k(52), fontWeight: 600, color: "#000", transform: "scaleX(.923)", transformOrigin: "left" }}>
-          Lo que florece/ 02
+          Lo que florece/ 01
         </p>
 
         <h1 data-m="title" className="absolute inset-x-0 whitespace-nowrap text-center font-normal" style={{ ...bodoni, top: k(397), fontSize: k(156), lineHeight: k(156), fontWeight: 500, color: "#000", transform: "scaleX(1.045)" }}>

@@ -40,10 +40,10 @@ export default function App() {
         <Route path="/silvana-2" element={<SilvanaTeGuardo />} />
         <Route path="/silvana-3" element={<SilvanaCorriente />} />
         <Route path="/silvana-4" element={<SilvanaLluvias />} />
-        <Route path="/juliana-1" element={<JulianaMedida />} />
-        <Route path="/juliana-2" element={<JulianaCoseme />} />
-        <Route path="/juliana-3" element={<JulianaDosDosDos />} />
-        <Route path="/juliana-4" element={<JulianaMarAdentro />} />
+        <Route path="/juliana-1" element={<JulianaCoseme />} />
+        <Route path="/juliana-2" element={<JulianaDosDosDos />} />
+        <Route path="/juliana-3" element={<JulianaMarAdentro />} />
+        <Route path="/juliana-4" element={<JulianaMedida />} />
         <Route path="/experiencia" element={<Experiencia />} />
         <Route path="*" element={<Inicio />} />
       </Routes>

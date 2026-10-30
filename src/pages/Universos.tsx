@@ -65,7 +65,7 @@ export default function Universos() {
           Habitar la música
         </p>
         <p data-m="kick" className="absolute whitespace-nowrap" style={{ ...bodoni, left: k(86), top: k(156), fontSize: k(44), lineHeight: k(52), fontWeight: 600, transform: "scaleX(.885)", transformOrigin: "left" }}>
-          03/ Los tres Universos
+          02/ Los tres Universos
         </p>
 
         <h1 className="m-0 font-normal">

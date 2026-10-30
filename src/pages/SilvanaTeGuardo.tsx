@@ -72,6 +72,12 @@ export default function SilvanaTeGuardo() {
           style={{ left: k(WX0), top: k(WAVE_Y - 60), width: k(WX1 - WX0), height: k(120) }}
         />
 
+        {/* fuente del audio: pequeña y tenue, entre el papel del reproductor y la caja del párrafo */}
+        <p data-m="cite" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 500, top: k(1442), fontSize: k(25), lineHeight: k(38), color: "#11110f", opacity: .55, transform: `translateX(${k(28)})` }}>
+          Fragmento de entrevista · Silvana Estrada<br />
+          <i>Song Exploder</i> · Episodio 4 (2022)
+        </p>
+
         <p data-m="para" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ ...mont, top: k(1586), fontSize: k(36), lineHeight: k(35.5) }}>
           Una canción que habita la memoria.<br />Un refugio para todo lo que aún<br />nos importa.
         </p>

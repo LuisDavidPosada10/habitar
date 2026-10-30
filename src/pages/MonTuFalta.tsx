@@ -72,6 +72,12 @@ export default function MonTuFalta() {
           style={{ left: k(WX0), top: k(WAVE_Y - 60), width: k(WX1 - WX0), height: k(120) }}
         />
 
+        {/* fuente del audio: pequeña y tenue, entre el papel del reproductor y el del párrafo */}
+        <p data-m="cite" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 500, top: k(1462), fontSize: k(25), lineHeight: k(38), color: "#11110f", opacity: .55, transform: `translateX(${k(22)})` }}>
+          Fragmento de entrevista · Yordi Rosado<br />
+          YouTube · <i>El secreto detrás de «Tu falta de querer»</i>
+        </p>
+
         <p data-m="para" className="absolute whitespace-nowrap text-center" style={{ ...mont, fontWeight: 600, left: k(256), width: k(700), top: k(1644), fontSize: k(34), lineHeight: k(35.8) }}>
           En este escenario nos<br />adentramos en la emoción,<br />la vulnerabilidad y el desamor<br />como parte de la<br />construcción artística de Mon<br />Laferte.
         </p>

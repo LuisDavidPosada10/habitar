@@ -31,7 +31,7 @@ export default function JulianaCoseme() {
         style={{ aspectRatio: `${W} / ${H}`, color: "#11110f" }}
       >
         {p.mediaProps && <audio {...p.mediaProps} />}
-        <img src="/juliana2/bg.webp?v=3" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
+        <img src="/juliana2/bg.webp?v=5" alt="" aria-hidden className="pointer-events-none absolute inset-0 size-full" />
 
         <p data-m="hdr" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ ...bodoni, top: k(74.5), fontSize: k(62), lineHeight: k(70), fontWeight: 600, transform: `translateX(${k(-.5)}) scaleX(.912)` }}>
           Habitar la música
@@ -71,7 +71,13 @@ export default function JulianaCoseme() {
           style={{ left: k(WX0), top: k(WAVE_Y - 60), width: k(WX1 - WX0), height: k(120) }}
         />
 
-        <p data-m="para" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ ...mont, top: k(1586), fontSize: k(36), lineHeight: k(37.5), transform: "scaleX(.92)" }}>
+        {/* fuente del audio: pequeña y tenue, entre el papel del reproductor y el recuadro del párrafo */}
+        <p data-m="cite" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 500, top: k(1442), fontSize: k(25), lineHeight: k(38), color: "#11110f", opacity: .55, transform: `translateX(${k(10)})` }}>
+          Entrevista · Felipe Lara - Juliana Velásquez<br />
+          Caracol Radio · <i>La W</i> · 28 de febrero de 2023
+        </p>
+
+        <p data-m="para" className="absolute inset-x-0 whitespace-nowrap text-center" style={{ ...mont, top: k(1606), fontSize: k(36), lineHeight: k(37.5), transform: "scaleX(.92)" }}>
           Para recordarnos que crecer también significa<br />no perder la capacidad de asombro. Un<br />momento para volver a nuestro niño interior,<br />divertirnos y compartir juntos.
         </p>
       </div>
